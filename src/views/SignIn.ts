@@ -12,379 +12,253 @@ export function SignIn() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 40px 24px;
-          background: linear-gradient(160deg, var(--color-background) 0%, var(--color-secondary-light) 50%, var(--color-background) 100%);
+          padding: 60px 24px;
+          background: #fdfaf5;
           position: relative;
           overflow: hidden;
         }
-        .si-page::before {
-          content: '';
+        
+        /* Premium Background Elements */
+        .si-bg-blob {
           position: absolute;
-          width: 500px;
-          height: 500px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(217,108,74,0.08) 0%, transparent 70%);
-          top: -100px;
-          right: -100px;
+          filter: blur(80px);
+          z-index: 0;
+          opacity: 0.15;
+          animation: float 20s infinite alternate;
         }
-        .si-page::after {
-          content: '';
-          position: absolute;
-          width: 400px;
-          height: 400px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(45,90,39,0.08) 0%, transparent 70%);
-          bottom: -80px;
-          left: -80px;
+        .blob-1 { width: 600px; height: 600px; background: #D96C4A; top: -200px; right: -100px; }
+        .blob-2 { width: 500px; height: 500px; background: #2D5A27; bottom: -150px; left: -100px; }
+        @keyframes float {
+          0% { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(40px, 60px) scale(1.1); }
         }
 
-        .si-card {
-          background: rgba(255,255,255,0.9);
-          backdrop-filter: blur(16px);
-          border-radius: 28px;
-          box-shadow: 0 16px 64px rgba(0,0,0,0.08);
-          border: 1px solid rgba(255,255,255,0.6);
-          max-width: 560px;
+        .si-container {
+          max-width: 1000px;
           width: 100%;
-          padding: 52px 44px;
+          display: grid;
+          grid-template-columns: 1fr 1.2fr;
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(20px);
+          border-radius: 40px;
+          overflow: hidden;
+          box-shadow: 0 30px 100px rgba(0,0,0,0.1);
+          border: 1px solid rgba(255,255,255,0.6);
           position: relative;
           z-index: 1;
-          animation: cardPop 0.5s ease;
+          animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes cardPop {
-          from { opacity: 0; transform: translateY(20px) scale(0.97); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .si-card .brand {
-          font-size: 2.2rem;
-          font-weight: 700;
-          color: var(--color-secondary);
-          letter-spacing: 1px;
-          text-align: center;
-          margin-bottom: 6px;
-        }
-        .si-card .tagline {
-          text-align: center;
-          color: var(--color-text-muted);
-          font-size: 1rem;
-          margin-bottom: 40px;
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        .si-role-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-          margin-bottom: 32px;
-        }
-
-        .si-role-option {
+        .si-visual {
+          background: linear-gradient(135deg, var(--color-secondary), #1e3f1a);
+          padding: 60px;
+          color: #fff;
           display: flex;
-          align-items: center;
-          gap: 20px;
-          padding: 22px 24px;
-          border-radius: 18px;
-          border: 2px solid #ece8e0;
-          cursor: pointer;
-          background: #fff;
-          transition: all 0.3s ease;
+          flex-direction: column;
+          justify-content: center;
           position: relative;
-          overflow: hidden;
         }
-        .si-role-option::before {
+        .si-visual::after {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 60%, rgba(217,108,74,0.04) 100%);
-          opacity: 0;
-          transition: opacity 0.3s;
+          background: url('https://www.transparenttextures.com/patterns/cubes.png');
+          opacity: 0.1;
         }
-        .si-role-option:hover {
-          border-color: var(--color-primary);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(217,108,74,0.1);
-        }
-        .si-role-option:hover::before { opacity: 1; }
-        .si-role-option.selected {
-          border-color: var(--color-primary);
-          background: linear-gradient(135deg, #FFF7F2 0%, #FFF1EB 100%);
-          box-shadow: 0 8px 28px rgba(217,108,74,0.15);
-        }
+        .si-visual h2 { font-size: 3rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+        .si-visual p { font-size: 1.1rem; opacity: 0.9; line-height: 1.6; max-width: 320px; }
+        
+        .si-content { padding: 60px 80px; display: flex; flex-direction: column; justify-content: center; }
+        .si-content .brand-tag { font-size: 2.5rem; font-weight: 800; color: var(--color-secondary); margin-bottom: 8px; letter-spacing: -1px; }
+        .si-content .subtitle { color: var(--color-text-muted); font-size: 1.1rem; margin-bottom: 40px; }
 
-        .si-role-icon {
-          width: 56px;
-          height: 56px;
-          border-radius: 16px;
+        .si-role-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+        
+        .si-role-card {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          padding: 24px 28px;
+          border-radius: 24px;
+          border: 2px solid #f0ece4;
+          cursor: pointer;
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          background: #fff;
+          position: relative;
+        }
+        .si-role-card:hover {
+          border-color: var(--color-primary);
+          transform: scale(1.02) translateX(10px);
+          box-shadow: 0 10px 30px rgba(217,108,74,0.12);
+        }
+        .si-role-card.selected {
+          border-color: var(--color-primary);
+          background: #fffaf8;
+          box-shadow: 0 15px 40px rgba(217,108,74,0.15);
+        }
+        .si-role-card.selected::after {
+          content: '✓';
+          position: absolute;
+          right: 24px;
+          width: 24px;
+          height: 24px;
+          background: var(--color-primary);
+          color: #fff;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 26px;
-          flex-shrink: 0;
-          transition: transform 0.3s ease;
-        }
-        .si-role-option:hover .si-role-icon { transform: scale(1.1); }
-
-        .si-role-info { flex: 1; }
-        .si-role-info h3 {
-          font-size: 1.15rem;
-          font-weight: 700;
-          color: var(--color-secondary);
-          margin-bottom: 3px;
-          letter-spacing: 0.5px;
-        }
-        .si-role-info p {
-          font-size: 0.85rem;
-          color: var(--color-text-muted);
-          line-height: 1.4;
+          font-size: 12px;
+          font-weight: 800;
         }
 
-        .si-role-arrow {
-          font-size: 1.2rem;
-          color: #ccc;
-          transition: all 0.3s;
-          flex-shrink: 0;
-        }
-        .si-role-option:hover .si-role-arrow { color: var(--color-primary); transform: translateX(4px); }
-        .si-role-option.selected .si-role-arrow { color: var(--color-primary); }
-
-        .si-continue-btn {
-          width: 100%;
-          padding: 16px;
-          border-radius: 30px;
-          border: none;
-          font-weight: 600;
-          font-size: 1.1rem;
-          cursor: pointer;
-          color: #fff;
-          background: linear-gradient(135deg, var(--color-primary), #e07c5a);
-          box-shadow: 0 8px 24px rgba(217,108,74,0.3);
-          transition: all 0.3s ease;
-          font-family: var(--font-main);
-        }
-        .si-continue-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(217,108,74,0.4); }
-        .si-continue-btn:disabled {
-          opacity: 0.45;
-          cursor: not-allowed;
-          transform: none;
-          box-shadow: none;
-        }
-
-        .si-divider {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          margin: 28px 0;
-          color: var(--color-text-muted);
-          font-size: 0.82rem;
-        }
-        .si-divider::before, .si-divider::after {
-          content: '';
-          flex: 1;
-          height: 1px;
-          background: #e0dcd4;
-        }
-
-        /* Form styles */
-        .si-form-group {
-          margin-bottom: 22px;
-        }
-        .si-form-group label {
-          display: block;
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: var(--color-secondary);
-          margin-bottom: 8px;
-        }
-        .si-form-group .label-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 8px;
-        }
-        .si-form-group .label-row a {
-          font-size: 0.82rem;
-          color: var(--color-primary);
-          font-weight: 500;
-        }
-        .si-form-group .label-row a:hover { text-decoration: underline; }
-        .si-input {
-          width: 100%;
-          padding: 14px 16px;
-          border: 1.5px solid #e0dcd4;
-          border-radius: 12px;
-          font-family: var(--font-main);
-          font-size: 0.95rem;
-          background: #FFFCF8;
-          outline: none;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .si-input:focus {
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 4px rgba(217,108,74,0.1);
-        }
-        .si-input::placeholder { color: #b8b4ab; }
-
-        .si-remember {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 28px;
-        }
-        .si-remember input { width: 18px; height: 18px; accent-color: var(--color-primary); cursor: pointer; }
-        .si-remember label { font-size: 0.9rem; color: var(--color-text-muted); cursor: pointer; }
-
-        .si-back-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 0.9rem;
-          color: var(--color-text-muted);
-          cursor: pointer;
-          margin-bottom: 28px;
-          transition: color 0.2s;
-        }
-        .si-back-link:hover { color: var(--color-primary); }
-
-        .si-role-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 6px 16px;
+        .si-role-icon-box {
+          width: 64px;
+          height: 64px;
           border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 600;
-          margin-bottom: 20px;
-        }
-
-        .si-tab-bar {
           display: flex;
-          border-radius: 14px;
-          background: #f0ece4;
-          padding: 4px;
-          margin-bottom: 28px;
+          align-items: center;
+          justify-content: center;
+          font-size: 28px;
+          flex-shrink: 0;
+          transition: transform 0.3s;
         }
-        .si-tab {
-          flex: 1;
-          padding: 12px;
-          text-align: center;
-          border-radius: 11px;
-          font-weight: 600;
-          font-size: 0.9rem;
+        .si-role-card:hover .si-role-icon-box { transform: rotate(-10deg) scale(1.1); }
+
+        .si-role-text h4 { font-size: 1.2rem; font-weight: 700; color: var(--color-secondary); margin-bottom: 4px; }
+        .si-role-text p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.4; }
+
+        .si-btn-main {
+          width: 100%;
+          padding: 20px;
+          border-radius: 24px;
+          border: none;
+          background: var(--color-primary);
+          color: #fff;
+          font-size: 1.1rem;
+          font-weight: 700;
           cursor: pointer;
           transition: all 0.3s;
-          color: var(--color-text-muted);
-          border: none;
-          background: none;
+          box-shadow: 0 12px 30px rgba(217,108,74,0.3);
           font-family: var(--font-main);
         }
-        .si-tab.active {
-          background: #fff;
-          color: var(--color-primary);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        .si-btn-main:hover {
+          background: #c45b3a;
+          transform: translateY(-2px);
+          box-shadow: 0 15px 40px rgba(217,108,74,0.4);
         }
-        .si-tab:hover:not(.active) { color: var(--color-text-main); }
+        .si-btn-main:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .si-phone-row {
-          display: flex;
-          gap: 10px;
-        }
-        .si-phone-row .si-country {
-          width: 80px;
-          padding: 14px 8px;
-          border: 1.5px solid #e0dcd4;
-          border-radius: 12px;
-          font-family: var(--font-main);
-          font-size: 0.95rem;
-          background: #FFFCF8;
-          outline: none;
-          text-align: center;
-          flex-shrink: 0;
-        }
-        .si-phone-row .si-input { flex: 1; }
+        /* Form Styles */
+        .si-tab-nav { display: flex; gap: 8px; background: #f0ece4; padding: 6px; border-radius: 18px; margin-bottom: 32px; }
+        .si-tab-btn { flex: 1; padding: 12px; border: none; background: none; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; color: var(--color-text-muted); font-family: var(--font-main); }
+        .si-tab-btn.active { background: #fff; color: var(--color-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        .si-footer-text {
-          text-align: center;
-          margin-top: 28px;
-          font-size: 0.9rem;
-          color: var(--color-text-muted);
+        .si-field { margin-bottom: 24px; }
+        .si-field label { display: block; font-size: 0.9rem; font-weight: 700; color: var(--color-secondary); margin-bottom: 10px; }
+        .si-input-wrapper { position: relative; }
+        .si-input-wrapper input {
+          width: 100%; padding: 16px 20px; border: 2px solid #f0ece4; border-radius: 18px;
+          font-size: 1rem; font-family: var(--font-main); outline: none; transition: 0.3s;
+          background: #fdfaf5;
         }
-        .si-footer-text a {
-          color: var(--color-primary);
-          font-weight: 600;
+        .si-input-wrapper input:focus { border-color: var(--color-primary); background: #fff; box-shadow: 0 0 0 5px rgba(217,108,74,0.08); }
+        
+        .si-back-btn {
+          display: inline-flex; align-items: center; gap: 8px; color: var(--color-text-muted);
+          font-weight: 600; cursor: pointer; margin-bottom: 32px; transition: 0.2s;
         }
-        .si-footer-text a:hover { text-decoration: underline; }
+        .si-back-btn:hover { color: var(--color-primary); transform: translateX(-4px); }
+
+        .si-badge {
+          display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px;
+          border-radius: 30px; font-weight: 700; font-size: 0.85rem; margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+          .si-container { grid-template-columns: 1fr; }
+          .si-visual { display: none; }
+          .si-content { padding: 40px; }
+        }
       </style>
 
       <div class="si-page">
-        <div class="si-card">
-          <div class="brand">RASOI.</div>
-          <p class="tagline">Choose how you want to join our family</p>
+        <div class="si-bg-blob blob-1"></div>
+        <div class="si-bg-blob blob-2"></div>
 
-          <div class="si-role-grid">
-            <div class="si-role-option" data-role="user">
-              <div class="si-role-icon" style="background: linear-gradient(135deg, #FFF1EB, #FFD6A5); color: #D96C4A;">👤</div>
-              <div class="si-role-info">
-                <h3>USER</h3>
-                <p>Order meals, subscribe to plans & enjoy homemade food</p>
-              </div>
-              <span class="si-role-arrow">→</span>
-            </div>
-
-            <div class="si-role-option" data-role="rasoimakers">
-              <div class="si-role-icon" style="background: linear-gradient(135deg, #E8F0EA, #c8e0cc); color: #2D5A27;">👩‍🍳</div>
-              <div class="si-role-info">
-                <h3>RASOIMAKERS</h3>
-                <p>Home chefs — cook with love & earn from your kitchen</p>
-              </div>
-              <span class="si-role-arrow">→</span>
-            </div>
-
-            <div class="si-role-option" data-role="rasoi-runners">
-              <div class="si-role-icon" style="background: linear-gradient(135deg, #EDE7F6, #D1C4E9); color: #5E35B1;">🚴</div>
-              <div class="si-role-info">
-                <h3>RASOI RUNNERS</h3>
-                <p>Deliver happiness — join our delivery partner network</p>
-              </div>
-              <span class="si-role-arrow">→</span>
-            </div>
+        <div class="si-container">
+          <div class="si-visual">
+            <h2>Join the<br>Family of<br>Home Tastes.</h2>
+            <p>From cooking with love to delivering smiles, there's a place for everyone at RASOI.</p>
           </div>
 
-          <button class="si-continue-btn" id="si-continue" disabled>Select a role to continue</button>
+          <div class="si-content">
+            <div class="brand-tag">RASOI.</div>
+            <p class="subtitle">Choose your journey with us</p>
 
-          <div class="si-divider">or</div>
-          <p style="text-align:center; font-size:0.88rem; color: var(--color-text-muted);">Already have an account? Your role is remembered.</p>
+            <div class="si-role-stack">
+              <div class="si-role-card" data-role="user">
+                <div class="si-role-icon-box" style="background: #FFF1EB; color: #D96C4A;">👤</div>
+                <div class="si-role-text">
+                  <h4>USER</h4>
+                  <p>Order fresh, homemade meals daily</p>
+                </div>
+              </div>
+
+              <div class="si-role-card" data-role="rasoimakers">
+                <div class="si-role-icon-box" style="background: #E8F0EA; color: #2D5A27;">👩‍🍳</div>
+                <div class="si-role-text">
+                  <h4>RASOIMAKERS</h4>
+                  <p>Cook from home and grow your brand</p>
+                </div>
+              </div>
+
+              <div class="si-role-card" data-role="rasoi-runners">
+                <div class="si-role-icon-box" style="background: #EDE7F6; color: #5E35B1;">🚴</div>
+                <div class="si-role-text">
+                  <h4>RASOI RUNNERS</h4>
+                  <p>Deliver happiness to hungry neighbors</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="si-btn-main" id="btn-continue" disabled>Select your role</button>
+            <p style="text-align:center; margin-top:24px; font-size:0.9rem; color:var(--color-text-muted);">
+              New member? <a href="#" style="color:var(--color-primary); font-weight:700;">Join now</a>
+            </p>
+          </div>
         </div>
       </div>
     `;
 
-    // Role selection logic
-    const roleOptions = container.querySelectorAll('.si-role-option');
-    const continueBtn = container.querySelector('#si-continue') as HTMLButtonElement;
+    const cards = container.querySelectorAll('.si-role-card');
+    const continueBtn = container.querySelector('#btn-continue') as HTMLButtonElement;
 
-    roleOptions.forEach(opt => {
-      opt.addEventListener('click', () => {
-        roleOptions.forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        selectedRole = (opt as HTMLElement).dataset.role || '';
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedRole = (card as HTMLElement).dataset.role || '';
         continueBtn.disabled = false;
-        const roleName = opt.querySelector('h3')!.textContent;
-        continueBtn.textContent = `Continue as ${roleName}`;
+        continueBtn.textContent = `Proceed as ${selectedRole.replace('-', ' ').toUpperCase()}`;
       });
     });
 
     continueBtn.addEventListener('click', () => {
-      if (!selectedRole) return;
-      renderLoginForm();
+      if (selectedRole) renderLoginForm();
     });
   }
 
   function getRoleMeta() {
     switch (selectedRole) {
-      case 'rasoimakers':
-        return { label: 'RASOIMAKERS', icon: '👩‍🍳', color: '#2D5A27', bg: 'linear-gradient(135deg, #E8F0EA, #c8e0cc)', desc: 'Home Chef Portal' };
-      case 'rasoi-runners':
-        return { label: 'RASOI RUNNERS', icon: '🚴', color: '#5E35B1', bg: 'linear-gradient(135deg, #EDE7F6, #D1C4E9)', desc: 'Delivery Partner Portal' };
-      default:
-        return { label: 'USER', icon: '👤', color: '#D96C4A', bg: 'linear-gradient(135deg, #FFF1EB, #FFD6A5)', desc: 'Customer Account' };
+      case 'rasoimakers': return { label: 'RASOIMAKERS', icon: '👩‍🍳', color: '#2D5A27', bg: '#E8F0EA' };
+      case 'rasoi-runners': return { label: 'RASOI RUNNERS', icon: '🚴', color: '#5E35B1', bg: '#EDE7F6' };
+      default: return { label: 'USER', icon: '👤', color: '#D96C4A', bg: '#FFF1EB' };
     }
   }
 
@@ -392,114 +266,110 @@ export function SignIn() {
     const meta = getRoleMeta();
     let loginTab = 'email';
 
-    function buildForm() {
+    function build() {
       container.innerHTML = `
+        <style>
+          /* Re-injecting common styles to ensure they apply */
+          .si-page { min-height: calc(100vh - 160px); display: flex; align-items: center; justify-content: center; padding: 60px 24px; background: #fdfaf5; position: relative; overflow: hidden; }
+          .si-bg-blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: 0; opacity: 0.15; animation: float 20s infinite alternate; }
+          .blob-1 { width: 600px; height: 600px; background: #D96C4A; top: -200px; right: -100px; }
+          .blob-2 { width: 500px; height: 500px; background: #2D5A27; bottom: -150px; left: -100px; }
+          @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40px, 60px) scale(1.1); } }
+          .si-container { max-width: 1000px; width: 100%; display: grid; grid-template-columns: 1fr 1.2fr; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-radius: 40px; overflow: hidden; box-shadow: 0 30px 100px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.6); position: relative; z-index: 1; }
+          .si-visual { background: linear-gradient(135deg, var(--color-secondary), #1e3f1a); padding: 60px; color: #fff; display: flex; flex-direction: column; justify-content: center; position: relative; }
+          .si-visual h2 { font-size: 3rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+          .si-visual p { font-size: 1.1rem; opacity: 0.9; line-height: 1.6; max-width: 320px; }
+          .si-content { padding: 60px 80px; display: flex; flex-direction: column; justify-content: center; }
+          .si-tab-nav { display: flex; gap: 8px; background: #f0ece4; padding: 6px; border-radius: 18px; margin-bottom: 32px; }
+          .si-tab-btn { flex: 1; padding: 12px; border: none; background: none; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; color: var(--color-text-muted); font-family: var(--font-main); }
+          .si-tab-btn.active { background: #fff; color: var(--color-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+          .si-field { margin-bottom: 20px; }
+          .si-field label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--color-secondary); margin-bottom: 8px; }
+          .si-input-wrapper input { width: 100%; padding: 16px 20px; border: 2px solid #f0ece4; border-radius: 18px; font-size: 1rem; font-family: var(--font-main); outline: none; transition: 0.3s; background: #fdfaf5; }
+          .si-input-wrapper input:focus { border-color: var(--color-primary); background: #fff; box-shadow: 0 0 0 5px rgba(217,108,74,0.08); }
+          .si-btn-main { width: 100%; padding: 20px; border-radius: 24px; border: none; background: var(--color-primary); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 12px 30px rgba(217,108,74,0.3); font-family: var(--font-main); }
+          .si-back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--color-text-muted); font-weight: 600; cursor: pointer; margin-bottom: 32px; transition: 0.2s; }
+          .si-back-btn:hover { color: var(--color-primary); transform: translateX(-4px); }
+          .si-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; }
+        </style>
+
         <div class="si-page">
-          <div class="si-card" style="max-width: 480px;">
-            <span class="si-back-link" id="si-back">← Back to role selection</span>
+          <div class="si-bg-blob blob-1"></div>
+          <div class="si-bg-blob blob-2"></div>
 
-            <div style="text-align:center; margin-bottom: 28px;">
-              <div class="si-role-badge" style="background: ${meta.bg}; color: ${meta.color};">
-                <span style="font-size:1.2rem;">${meta.icon}</span> ${meta.label}
-              </div>
-              <div class="brand" style="margin-bottom: 4px;">RASOI.</div>
-              <p class="tagline" style="margin-bottom: 0;">Sign in to ${meta.desc}</p>
+          <div class="si-container">
+            <div class="si-visual">
+              <h2>Welcome<br>Back to<br>RASOI.</h2>
+              <p>Sign in to access your ${meta.label.toLowerCase()} account and continue your culinary journey.</p>
             </div>
 
-            <div class="si-tab-bar">
-              <button class="si-tab ${loginTab === 'email' ? 'active' : ''}" data-tab="email">📧 Email</button>
-              <button class="si-tab ${loginTab === 'phone' ? 'active' : ''}" data-tab="phone">📱 Phone</button>
-            </div>
-
-            <form id="si-form">
-              ${loginTab === 'email' ? `
-                <div class="si-form-group">
-                  <label>Email Address *</label>
-                  <input type="email" class="si-input" required placeholder="hello@example.com" id="si-email" />
-                </div>
-                <div class="si-form-group">
-                  <label>Phone Number *</label>
-                  <div class="si-phone-row">
-                    <input type="text" class="si-country" value="+91" readonly />
-                    <input type="tel" class="si-input" required placeholder="98765 43210" id="si-phone" pattern="[0-9]{10}" title="Enter 10-digit phone number" />
-                  </div>
-                </div>
-                <div class="si-form-group">
-                  <div class="label-row">
-                    <label style="margin-bottom:0;">Set Password *</label>
-                    <a href="#">Forgot Password?</a>
-                  </div>
-                  <input type="password" class="si-input" required placeholder="Create a strong password" id="si-password" minlength="6" />
-                </div>
-              ` : `
-                <div class="si-form-group">
-                  <label>Phone Number *</label>
-                  <div class="si-phone-row">
-                    <input type="text" class="si-country" value="+91" readonly />
-                    <input type="tel" class="si-input" required placeholder="98765 43210" id="si-phone" pattern="[0-9]{10}" title="Enter 10-digit phone number" />
-                  </div>
-                </div>
-                <div class="si-form-group">
-                  <label>Email Address *</label>
-                  <input type="email" class="si-input" required placeholder="hello@example.com" id="si-email" />
-                </div>
-                <div class="si-form-group">
-                  <div class="label-row">
-                    <label style="margin-bottom:0;">Set Password *</label>
-                    <a href="#">Forgot Password?</a>
-                  </div>
-                  <input type="password" class="si-input" required placeholder="Create a strong password" id="si-password" minlength="6" />
-                </div>
-              `}
-
-              <div class="si-remember">
-                <input type="checkbox" id="si-remember" />
-                <label for="si-remember">Remember me</label>
+            <div class="si-content">
+              <div class="si-back-btn" id="btn-back">← Back to roles</div>
+              
+              <div class="si-badge" style="background: ${meta.bg}; color: ${meta.color};">
+                <span>${meta.icon}</span> ${meta.label}
               </div>
 
-              <button type="submit" class="si-continue-btn">Sign In as ${meta.label}</button>
-            </form>
+              <div class="si-tab-nav">
+                <button class="si-tab-btn ${loginTab === 'email' ? 'active' : ''}" data-tab="email">📧 Email</button>
+                <button class="si-tab-btn ${loginTab === 'phone' ? 'active' : ''}" data-tab="phone">📱 Phone</button>
+              </div>
 
-            <p class="si-footer-text">
-              New here? <a href="#" id="si-signup-link">Create an account</a>
-            </p>
+              <form id="si-form">
+                ${loginTab === 'email' ? `
+                  <div class="si-field">
+                    <label>Email Address</label>
+                    <div class="si-input-wrapper"><input type="email" required placeholder="name@example.com" id="in-email" /></div>
+                  </div>
+                ` : `
+                  <div class="si-field">
+                    <label>Phone Number</label>
+                    <div class="si-input-wrapper" style="display:flex; gap:10px;">
+                      <input type="text" value="+91" style="width:70px; text-align:center;" readonly />
+                      <input type="tel" required placeholder="9876543210" id="in-phone" pattern="[0-9]{10}" />
+                    </div>
+                  </div>
+                `}
+
+                <div class="si-field">
+                  <div style="display:flex; justify-content:space-between;">
+                    <label>Password</label>
+                    <a href="#" style="font-size:0.8rem; color:var(--color-primary); font-weight:600;">Forgot?</a>
+                  </div>
+                  <div class="si-input-wrapper"><input type="password" required placeholder="••••••••" id="in-pass" /></div>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:32px;">
+                  <input type="checkbox" id="rem" style="width:18px; height:18px; accent-color:var(--color-primary);" />
+                  <label for="rem" style="font-size:0.9rem; color:var(--color-text-muted); cursor:pointer;">Keep me signed in</label>
+                </div>
+
+                <button type="submit" class="si-btn-main">Sign In to Dashboard</button>
+              </form>
+            </div>
           </div>
         </div>
       `;
 
-      // Tab switching
-      container.querySelectorAll('.si-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          loginTab = (tab as HTMLElement).dataset.tab || 'email';
-          buildForm();
+      container.querySelector('#btn-back')!.addEventListener('click', renderRoleSelector);
+      
+      container.querySelectorAll('.si-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          loginTab = (btn as HTMLElement).dataset.tab || 'email';
+          build();
         });
       });
 
-      // Back button
-      container.querySelector('#si-back')!.addEventListener('click', () => {
-        renderRoleSelector();
-      });
-
-      // Form submit → redirect to role dashboard
       container.querySelector('#si-form')!.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (selectedRole === 'rasoimakers') {
-          window.location.hash = '#/dashboard/rasoimakers';
-        } else if (selectedRole === 'rasoi-runners') {
-          window.location.hash = '#/dashboard/runners';
-        } else {
-          window.location.hash = '#/';
-        }
-      });
-
-      // Sign up link
-      container.querySelector('#si-signup-link')!.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Sign up as ' + meta.label + ' coming soon!');
+        const role = selectedRole;
+        if (role === 'rasoimakers') window.location.hash = '#/dashboard/rasoimakers';
+        else if (role === 'rasoi-runners') window.location.hash = '#/dashboard/runners';
+        else window.location.hash = '#/';
       });
     }
 
-    buildForm();
+    build();
   }
 
   renderRoleSelector();
