@@ -255,6 +255,52 @@ export function SignIn() {
           margin-bottom: 20px;
         }
 
+        .si-tab-bar {
+          display: flex;
+          border-radius: 14px;
+          background: #f0ece4;
+          padding: 4px;
+          margin-bottom: 28px;
+        }
+        .si-tab {
+          flex: 1;
+          padding: 12px;
+          text-align: center;
+          border-radius: 11px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.3s;
+          color: var(--color-text-muted);
+          border: none;
+          background: none;
+          font-family: var(--font-main);
+        }
+        .si-tab.active {
+          background: #fff;
+          color: var(--color-primary);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .si-tab:hover:not(.active) { color: var(--color-text-main); }
+
+        .si-phone-row {
+          display: flex;
+          gap: 10px;
+        }
+        .si-phone-row .si-country {
+          width: 80px;
+          padding: 14px 8px;
+          border: 1.5px solid #e0dcd4;
+          border-radius: 12px;
+          font-family: var(--font-main);
+          font-size: 0.95rem;
+          background: #FFFCF8;
+          outline: none;
+          text-align: center;
+          flex-shrink: 0;
+        }
+        .si-phone-row .si-input { flex: 1; }
+
         .si-footer-text {
           text-align: center;
           margin-top: 28px;
@@ -344,68 +390,116 @@ export function SignIn() {
 
   function renderLoginForm() {
     const meta = getRoleMeta();
+    let loginTab = 'email';
 
-    container.innerHTML = `
-      <div class="si-page">
-        <div class="si-card" style="max-width: 480px;">
-          <span class="si-back-link" id="si-back">← Back to role selection</span>
+    function buildForm() {
+      container.innerHTML = `
+        <div class="si-page">
+          <div class="si-card" style="max-width: 480px;">
+            <span class="si-back-link" id="si-back">← Back to role selection</span>
 
-          <div style="text-align:center; margin-bottom: 32px;">
-            <div class="si-role-badge" style="background: ${meta.bg}; color: ${meta.color};">
-              <span style="font-size:1.2rem;">${meta.icon}</span> ${meta.label}
-            </div>
-            <div class="brand" style="margin-bottom: 4px;">RASOI.</div>
-            <p class="tagline" style="margin-bottom: 0;">Sign in to ${meta.desc}</p>
-          </div>
-
-          <form id="si-form">
-            <div class="si-form-group">
-              <label>Email Address</label>
-              <input type="email" class="si-input" required placeholder="hello@example.com" id="si-email" />
-            </div>
-
-            <div class="si-form-group">
-              <div class="label-row">
-                <label style="margin-bottom:0;">Password</label>
-                <a href="#">Forgot Password?</a>
+            <div style="text-align:center; margin-bottom: 28px;">
+              <div class="si-role-badge" style="background: ${meta.bg}; color: ${meta.color};">
+                <span style="font-size:1.2rem;">${meta.icon}</span> ${meta.label}
               </div>
-              <input type="password" class="si-input" required placeholder="Enter your password" id="si-password" />
+              <div class="brand" style="margin-bottom: 4px;">RASOI.</div>
+              <p class="tagline" style="margin-bottom: 0;">Sign in to ${meta.desc}</p>
             </div>
 
-            <div class="si-remember">
-              <input type="checkbox" id="si-remember" />
-              <label for="si-remember">Remember me</label>
+            <div class="si-tab-bar">
+              <button class="si-tab ${loginTab === 'email' ? 'active' : ''}" data-tab="email">📧 Email</button>
+              <button class="si-tab ${loginTab === 'phone' ? 'active' : ''}" data-tab="phone">📱 Phone</button>
             </div>
 
-            <button type="submit" class="si-continue-btn">Sign In as ${meta.label}</button>
-          </form>
+            <form id="si-form">
+              ${loginTab === 'email' ? `
+                <div class="si-form-group">
+                  <label>Email Address *</label>
+                  <input type="email" class="si-input" required placeholder="hello@example.com" id="si-email" />
+                </div>
+                <div class="si-form-group">
+                  <label>Phone Number *</label>
+                  <div class="si-phone-row">
+                    <input type="text" class="si-country" value="+91" readonly />
+                    <input type="tel" class="si-input" required placeholder="98765 43210" id="si-phone" pattern="[0-9]{10}" title="Enter 10-digit phone number" />
+                  </div>
+                </div>
+                <div class="si-form-group">
+                  <div class="label-row">
+                    <label style="margin-bottom:0;">Set Password *</label>
+                    <a href="#">Forgot Password?</a>
+                  </div>
+                  <input type="password" class="si-input" required placeholder="Create a strong password" id="si-password" minlength="6" />
+                </div>
+              ` : `
+                <div class="si-form-group">
+                  <label>Phone Number *</label>
+                  <div class="si-phone-row">
+                    <input type="text" class="si-country" value="+91" readonly />
+                    <input type="tel" class="si-input" required placeholder="98765 43210" id="si-phone" pattern="[0-9]{10}" title="Enter 10-digit phone number" />
+                  </div>
+                </div>
+                <div class="si-form-group">
+                  <label>Email Address *</label>
+                  <input type="email" class="si-input" required placeholder="hello@example.com" id="si-email" />
+                </div>
+                <div class="si-form-group">
+                  <div class="label-row">
+                    <label style="margin-bottom:0;">Set Password *</label>
+                    <a href="#">Forgot Password?</a>
+                  </div>
+                  <input type="password" class="si-input" required placeholder="Create a strong password" id="si-password" minlength="6" />
+                </div>
+              `}
 
-          <p class="si-footer-text">
-            New here? <a href="#" id="si-signup-link">Create an account</a>
-          </p>
+              <div class="si-remember">
+                <input type="checkbox" id="si-remember" />
+                <label for="si-remember">Remember me</label>
+              </div>
+
+              <button type="submit" class="si-continue-btn">Sign In as ${meta.label}</button>
+            </form>
+
+            <p class="si-footer-text">
+              New here? <a href="#" id="si-signup-link">Create an account</a>
+            </p>
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    // Back button
-    container.querySelector('#si-back')!.addEventListener('click', () => {
-      renderRoleSelector();
-    });
+      // Tab switching
+      container.querySelectorAll('.si-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          loginTab = (tab as HTMLElement).dataset.tab || 'email';
+          buildForm();
+        });
+      });
 
-    // Form submit
-    container.querySelector('#si-form')!.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const meta = getRoleMeta();
-      alert('Welcome to RASOI as ' + meta.label + '! Redirecting to your dashboard.');
-      window.location.hash = '#/';
-    });
+      // Back button
+      container.querySelector('#si-back')!.addEventListener('click', () => {
+        renderRoleSelector();
+      });
 
-    // Sign up link
-    container.querySelector('#si-signup-link')!.addEventListener('click', (e) => {
-      e.preventDefault();
-      const meta = getRoleMeta();
-      alert('Sign up as ' + meta.label + ' coming soon!');
-    });
+      // Form submit → redirect to role dashboard
+      container.querySelector('#si-form')!.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (selectedRole === 'rasoimakers') {
+          window.location.hash = '#/dashboard/rasoimakers';
+        } else if (selectedRole === 'rasoi-runners') {
+          window.location.hash = '#/dashboard/runners';
+        } else {
+          window.location.hash = '#/';
+        }
+      });
+
+      // Sign up link
+      container.querySelector('#si-signup-link')!.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Sign up as ' + meta.label + ' coming soon!');
+      });
+    }
+
+    buildForm();
   }
 
   renderRoleSelector();

@@ -9,6 +9,8 @@ import { Builder } from './views/Builder';
 import { Checkout } from './views/Checkout';
 import { SignIn } from './views/SignIn';
 import { SubscriptionOrder } from './views/SubscriptionOrder';
+import { RasoimakersDashboard } from './views/RasoimakersDashboard';
+import { RunnersDashboard } from './views/RunnersDashboard';
 
 // A simple router class to manage views
 class Router {
@@ -28,13 +30,25 @@ class Router {
 
   render() {
     this.appElement.innerHTML = '';
+
+    // Dashboard routes — full-screen layout (no Navbar/Footer)
+    if (this.currentPath === '#/dashboard/rasoimakers') {
+      this.appElement.appendChild(RasoimakersDashboard());
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (this.currentPath === '#/dashboard/runners') {
+      this.appElement.appendChild(RunnersDashboard());
+      window.scrollTo(0, 0);
+      return;
+    }
     
     // Add Navbar
     this.appElement.appendChild(Navbar());
 
     // Main content container
     const main = document.createElement('main');
-    main.style.minHeight = 'calc(100vh - 160px)'; // Account for navbar and footer
+    main.style.minHeight = 'calc(100vh - 160px)';
 
     // Route logic
     switch (this.currentPath) {
@@ -80,3 +94,4 @@ class Router {
 // Initialize application
 const router = new Router();
 router.render();
+
