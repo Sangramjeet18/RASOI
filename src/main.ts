@@ -8,6 +8,7 @@ import { Subscriptions } from './views/Subscriptions';
 import { Builder } from './views/Builder';
 import { Checkout } from './views/Checkout';
 import { SignIn } from './views/SignIn';
+import { SubscriptionOrder } from './views/SubscriptionOrder';
 
 // A simple router class to manage views
 class Router {
@@ -45,6 +46,10 @@ class Router {
         break;
       case '#/subscriptions':
         main.appendChild(Subscriptions());
+        break;
+      case '#/subscribe/weekly':
+      case '#/subscribe/monthly':
+        main.appendChild(SubscriptionOrder());
         break;
       case '#/builder':
         main.appendChild(Builder());

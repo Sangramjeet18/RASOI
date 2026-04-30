@@ -35,7 +35,7 @@ export function Subscriptions() {
           </li>
         </ul>
         
-        <button class="btn-primary" style="width: 100%;">Select Weekly</button>
+        <button class="btn-primary" style="width: 100%;" onclick="window.location.hash='#/subscribe/weekly'">Select Weekly</button>
       </div>
       
       <!-- Plan 2 -->
@@ -65,7 +65,7 @@ export function Subscriptions() {
           </li>
         </ul>
         
-        <button class="btn-primary" style="width: 100%; background-color: var(--color-secondary);">Select Monthly</button>
+        <button class="btn-primary" style="width: 100%; background-color: var(--color-secondary);" onclick="window.location.hash='#/subscribe/monthly'">Select Monthly</button>
       </div>
       
     </div>
