@@ -1,13 +1,13 @@
 :root {
-  --color-background: #F7F4EB;
+  --color-background: #F5E9DA; /* Warm Beige */
   --color-surface: #FFFFFF;
-  --color-primary: #D96C4A; /* Warm Orange */
-  --color-secondary: #2D5A27; /* Dark Green */
-  --color-secondary-light: #E8F0EA; /* Pastel Green */
+  --color-primary: #D96B3B; /* Terracotta/Orange */
+  --color-secondary: #1F4D2B; /* Deep Green */
+  --color-secondary-light: #E8F0EA;
   --color-text-main: #333333;
-  --color-text-muted: #666666;
+  --color-text-muted: #6B7280; /* Soft gray */
   
-  --font-main: 'Outfit', sans-serif;
+  --font-main: 'Inter', sans-serif;
 }
 
 * {
@@ -40,31 +40,33 @@ button {
 .btn-primary {
   background-color: var(--color-primary);
   color: #fff;
-  padding: 12px 24px;
-  border-radius: 30px;
+  padding: 12px 28px;
+  border-radius: 30px; /* Pill style */
   font-weight: 500;
   font-size: 1rem;
+  box-shadow: 0 4px 14px rgba(217, 107, 59, 0.3); /* Soft shadow */
 }
 
 .btn-primary:hover {
   background-color: #c45b3a;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(217, 108, 74, 0.3);
+  box-shadow: 0 6px 20px rgba(217, 107, 59, 0.5); /* Hover glow */
 }
 
 .btn-secondary {
   background-color: var(--color-secondary);
   color: #fff;
-  padding: 12px 24px;
-  border-radius: 30px;
+  padding: 12px 28px;
+  border-radius: 30px; /* Pill style */
   font-weight: 500;
   font-size: 1rem;
+  box-shadow: 0 4px 14px rgba(31, 77, 43, 0.3); /* Soft shadow */
 }
 
 .btn-secondary:hover {
-  background-color: #1e3f1a;
+  background-color: #163a1e;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 90, 39, 0.3);
+  box-shadow: 0 6px 20px rgba(31, 77, 43, 0.5); /* Hover glow */
 }
 
 .container {
@@ -99,3 +101,21 @@ button {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+.food-option, .cook-option {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  border: 2px solid transparent;
+  opacity: 0.7;
+}
+
+.food-option:hover, .cook-option:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  opacity: 0.9;
+}
+
+.food-option.selected, .cook-option.selected {
+  border: 2px solid var(--color-primary) !important;
+  opacity: 1 !important;
+}
+

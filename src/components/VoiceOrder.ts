@@ -3,7 +3,6 @@ export function VoiceOrder() {
   
   // Floating Action Button
   const fab = document.createElement('button');
-  fab.className = 'btn-primary';
   fab.style.position = 'fixed';
   fab.style.bottom = '32px';
   fab.style.right = '32px';
@@ -13,8 +12,23 @@ export function VoiceOrder() {
   fab.style.display = 'flex';
   fab.style.alignItems = 'center';
   fab.style.justifyContent = 'center';
-  fab.style.boxShadow = '0 8px 24px rgba(217, 108, 74, 0.4)';
+  // Orange gradient and soft glow
+  fab.style.background = 'linear-gradient(135deg, #FF8A50 0%, var(--color-primary) 100%)';
+  fab.style.boxShadow = '0 8px 24px rgba(217, 107, 59, 0.5), inset 0 2px 4px rgba(255,255,255,0.3)';
+  fab.style.color = 'white';
+  fab.style.border = 'none';
+  fab.style.cursor = 'pointer';
+  fab.style.transition = 'all 0.3s ease';
   fab.style.zIndex = '1000';
+  
+  fab.onmouseover = () => {
+    fab.style.transform = 'translateY(-3px) scale(1.05)';
+    fab.style.boxShadow = '0 12px 30px rgba(217, 107, 59, 0.6), inset 0 2px 4px rgba(255,255,255,0.4)';
+  };
+  fab.onmouseout = () => {
+    fab.style.transform = 'none';
+    fab.style.boxShadow = '0 8px 24px rgba(217, 107, 59, 0.5), inset 0 2px 4px rgba(255,255,255,0.3)';
+  };
   
   // Microphone SVG
   fab.innerHTML = `

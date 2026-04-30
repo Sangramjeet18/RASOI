@@ -11,6 +11,8 @@ import { SignIn } from './views/SignIn';
 import { SubscriptionOrder } from './views/SubscriptionOrder';
 import { RasoimakersDashboard } from './views/RasoimakersDashboard';
 import { RunnersDashboard } from './views/RunnersDashboard';
+import { CookProfiles } from './views/CookProfiles';
+import { applyTranslations } from './i18n/translations';
 
 // A simple router class to manage views
 class Router {
@@ -49,6 +51,10 @@ class Router {
     // Main content container
     const main = document.createElement('main');
     main.style.minHeight = 'calc(100vh - 160px)';
+    
+    if (this.currentPath !== '#/') {
+      main.style.paddingTop = '100px'; // Offset for absolute Navbar
+    }
 
     // Route logic
     switch (this.currentPath) {
@@ -67,6 +73,9 @@ class Router {
         break;
       case '#/builder':
         main.appendChild(Builder());
+        break;
+      case '#/cooks':
+        main.appendChild(CookProfiles());
         break;
       case '#/checkout':
         main.appendChild(Checkout());
@@ -88,6 +97,10 @@ class Router {
     
     // Scroll to top on route change
     window.scrollTo(0, 0);
+
+    // Apply translations
+    const savedLang = localStorage.getItem('lang') || 'English';
+    applyTranslations(savedLang);
   }
 }
 

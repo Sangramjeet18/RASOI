@@ -1,3 +1,5 @@
+import { applyTranslations } from '../i18n/translations';
+
 interface MenuItem {
   id: number;
   name: string;
@@ -51,17 +53,17 @@ export function Menu() {
   const renderContent = () => {
     container.innerHTML = `
       <div style="text-align: center; margin-bottom: 64px;">
-        <h1 style="font-size: 3rem; color: var(--color-secondary); margin-bottom: 16px;">Seasonal Nourishment</h1>
-        <p style="color: var(--color-text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">
+        <h1 style="font-size: 3rem; color: var(--color-secondary); margin-bottom: 16px;" data-translate="menuTitle">Seasonal Nourishment</h1>
+        <p style="color: var(--color-text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem;" data-translate="menuDesc">
           Discover this week's comforting meals, prepared with fresh, seasonal ingredients and traditional spices.
         </p>
       </div>
       
       <div style="display: flex; gap: 16px; margin-bottom: 48px; justify-content: center; flex-wrap: wrap;" id="filter-buttons">
-        <button class="btn-primary filter-btn" data-filter="All" style="${currentFilter === 'All' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}">All Meals</button>
-        <button class="btn-primary filter-btn" data-filter="Vegetarian" style="${currentFilter === 'Vegetarian' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}">Vegetarian</button>
-        <button class="btn-primary filter-btn" data-filter="Non-Veg" style="${currentFilter === 'Non-Veg' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}">Non-Veg</button>
-        <button class="btn-primary filter-btn" data-filter="Healthy Snacks" style="${currentFilter === 'Healthy Snacks' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}">Healthy Snacks</button>
+        <button class="btn-primary filter-btn" data-filter="All" style="${currentFilter === 'All' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}" data-translate="allMeals">All Meals</button>
+        <button class="btn-primary filter-btn" data-filter="Vegetarian" style="${currentFilter === 'Vegetarian' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}" data-translate="vegetarian">Vegetarian</button>
+        <button class="btn-primary filter-btn" data-filter="Non-Veg" style="${currentFilter === 'Non-Veg' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}" data-translate="nonVeg">Non-Veg</button>
+        <button class="btn-primary filter-btn" data-filter="Healthy Snacks" style="${currentFilter === 'Healthy Snacks' ? '' : 'background-color: transparent; color: var(--color-text-main); border: 1px solid #ddd;'}" data-translate="healthySnacks">Healthy Snacks</button>
       </div>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px;" id="menu-grid">
@@ -98,11 +100,11 @@ export function Menu() {
             <span style="font-weight: 600; color: var(--color-primary); font-size: 1.2rem;">₹${item.price}</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; color: #555; background-color: rgba(0,0,0,0.03); padding: 8px; border-radius: 6px;">
-             <span><strong style="color: var(--color-text-main)">Qty:</strong> ${item.quantity}</span>
-             <span><strong style="color: var(--color-text-main)">Chef:</strong> ${item.madeBy}</span>
+             <span><strong style="color: var(--color-text-main)" data-translate="qty">Qty:</strong> ${item.quantity}</span>
+             <span><strong style="color: var(--color-text-main)" data-translate="chef">Chef:</strong> ${item.madeBy}</span>
           </div>
           <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 24px; flex-grow: 1;">${item.description}</p>
-          <button class="btn-primary add-to-cart-btn" style="width: 100%;">Add to Cart</button>
+          <button class="btn-primary add-to-cart-btn" style="width: 100%;" data-translate="addToCart">Add to Cart</button>
         </div>
       `;
 
@@ -123,6 +125,9 @@ export function Menu() {
         renderContent();
       });
     });
+
+    const savedLang = localStorage.getItem('lang') || 'English';
+    applyTranslations(savedLang);
   };
 
   renderContent();
