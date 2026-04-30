@@ -1,9 +1,10 @@
-const navItems = [
-  { icon: '🗺️', label: 'Live Map', id: 'map' },
-  { icon: '📦', label: 'Orders', id: 'orders' },
-  { icon: '💰', label: 'Earnings', id: 'earnings' },
-  { icon: '💬', label: 'Chat', id: 'chat' },
-  { icon: '👤', label: 'Profile', id: 'profile' },
+const runnerNav = [
+  { icon: 'explore', label: 'Live Map', id: 'map' },
+  { icon: 'local_shipping', label: 'My Deliveries', id: 'deliveries' },
+  { icon: 'account_balance_wallet', label: 'Earnings', id: 'earnings' },
+  { icon: 'forum', label: 'Messages', id: 'messages' },
+  { icon: 'person', label: 'Profile', id: 'profile' },
+  { icon: 'support_agent', label: 'Support', id: 'support' },
 ];
 
 export function RunnersDashboard() {
@@ -14,183 +15,388 @@ export function RunnersDashboard() {
   function render() {
     container.innerHTML = `
       <style>
-        .rr-layout { display: flex; min-height: 100vh; background: #fdfaf5; font-family: var(--font-main); }
-        
-        /* Sidebar */
-        .rr-side {
-          width: 240px; background: #fff; border-right: 1px solid #f0ece4;
-          display: flex; flex-direction: column; padding: 32px 0;
-          position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
-        }
-        .rr-side-logo { padding: 0 32px 40px; font-size: 1.5rem; font-weight: 800; color: var(--color-secondary); display: flex; align-items: center; gap: 10px; }
-        
-        .rr-nav-item {
-          display: flex; align-items: center; gap: 14px; padding: 14px 28px;
-          cursor: pointer; transition: 0.3s; color: var(--color-text-muted);
-          font-weight: 700; border: none; background: none; width: 100%; text-align: left;
-          font-family: var(--font-main); font-size: 0.95rem;
-        }
-        .rr-nav-item:hover { color: var(--color-primary); background: #fffaf8; }
-        .rr-nav-item.active {
-          color: var(--color-primary); background: #fffaf8;
-          border-left: 5px solid var(--color-primary);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
+
+        :root {
+          --rr-bg: #F8F5F0;
+          --rr-primary: #8B5E3C;
+          --rr-secondary: #E8DCCB;
+          --rr-accent: #2D5A27; /* Keeping a subtle green for 'Online' status */
+          --rr-text: #2D2A26;
+          --rr-text-light: #6D6A66;
+          --rr-border: #E8E4DF;
+          --rr-white: #FFFFFF;
+          --rr-radius: 14px;
         }
 
-        .rr-status-card {
-          margin: 20px; padding: 16px; border-radius: 20px;
-          background: ${isOnline ? '#E8F5E9' : '#FFF3E0'};
-          border: 1px solid ${isOnline ? '#A5D6A7' : '#FFCC80'};
+        .rr-app {
+          display: flex;
+          min-height: 100vh;
+          background-color: var(--rr-bg);
+          color: var(--rr-text);
+          font-family: 'Inter', sans-serif;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        /* Sidebar */
+        .rr-sidebar {
+          width: 260px;
+          background: var(--rr-white);
+          border-right: 1px solid var(--rr-border);
+          display: flex;
+          flex-direction: column;
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 100;
+        }
+
+        .rr-sidebar-logo {
+          padding: 32px 24px;
+          font-family: 'Playfair Display', serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--rr-primary);
+        }
+
+        .rr-status-widget {
+          margin: 0 20px 32px;
+          padding: 20px;
+          background: var(--rr-bg);
+          border-radius: var(--rr-radius);
+          text-align: center;
+          border: 1px solid var(--rr-border);
+        }
+
+        .rr-status-indicator {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+          color: ${isOnline ? 'var(--rr-accent)' : '#C0392B'};
+        }
+
+        .rr-status-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: currentColor;
+          box-shadow: 0 0 0 4px ${isOnline ? 'rgba(45,90,39,0.1)' : 'rgba(192,57,43,0.1)'};
+        }
+
+        .btn-status-toggle {
+          width: 100%;
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid var(--rr-border);
+          background: var(--rr-white);
+          color: var(--rr-text);
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+        .btn-status-toggle:hover {
+          border-color: var(--rr-primary);
+          color: var(--rr-primary);
+        }
+
+        .rr-nav { flex: 1; padding: 0 12px; }
+
+        .rr-nav-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          margin-bottom: 4px;
+          border-radius: 10px;
+          cursor: pointer;
+          color: var(--rr-text-light);
+          font-size: 0.9rem;
+          font-weight: 500;
+          transition: 0.2s;
+          border: none;
+          background: none;
+          width: 100%;
+          text-align: left;
+        }
+
+        .rr-nav-item:hover { background-color: var(--rr-bg); color: var(--rr-text); }
+
+        .rr-nav-item.active {
+          background-color: var(--rr-secondary);
+          color: var(--rr-primary);
+          font-weight: 600;
+        }
+
+        /* Main area */
+        .rr-main { flex: 1; margin-left: 260px; display: flex; flex-direction: column; }
+
+        .rr-navbar {
+          height: 72px;
+          background: var(--rr-white);
+          border-bottom: 1px solid var(--rr-border);
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 0 40px;
+          gap: 24px;
+          position: sticky;
+          top: 0;
+          z-index: 90;
+        }
+
+        .rr-content { padding: 40px; }
+
+        .rr-grid {
+          display: grid;
+          grid-template-columns: 1fr 340px;
+          gap: 32px;
+        }
+
+        /* Map Card */
+        .rr-card {
+          background: var(--rr-white);
+          border-radius: var(--rr-radius);
+          border: 1px solid var(--rr-border);
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .rr-map-view {
+          height: 520px;
+          background: #E5E1DA; /* Map neutral */
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .rr-marker {
+          position: absolute;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: var(--rr-white);
+          border: 2px solid var(--rr-primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          z-index: 2;
+        }
+
+        .rr-marker.me {
+          border-color: var(--rr-accent);
+          color: var(--rr-accent);
+          animation: pulseMarker 2s infinite;
+        }
+
+        @keyframes pulseMarker {
+          0% { box-shadow: 0 0 0 0 rgba(45,90,39,0.4); }
+          70% { box-shadow: 0 0 0 15px rgba(45,90,39,0); }
+          100% { box-shadow: 0 0 0 0 rgba(45,90,39,0); }
+        }
+
+        /* Sidebar Panel */
+        .rr-panel-card {
+          background: var(--rr-white);
+          border-radius: var(--rr-radius);
+          border: 1px solid var(--rr-border);
+          padding: 24px;
+          margin-bottom: 24px;
+        }
+
+        .rr-panel-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: var(--rr-primary); }
+
+        .rr-order-info { margin-bottom: 24px; }
+        .rr-order-badge {
+          display: inline-block;
+          padding: 4px 10px;
+          background: var(--rr-secondary);
+          color: var(--rr-primary);
+          border-radius: 6px;
+          font-size: 0.7rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+
+        .rr-route-step {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 20px;
+          position: relative;
+        }
+
+        .rr-route-step::after {
+          content: ''; position: absolute; left: 15px; top: 32px; bottom: -20px;
+          width: 1px; border-left: 2px dashed var(--rr-border);
+        }
+        .rr-route-step:last-child::after { display: none; }
+
+        .rr-step-bullet {
+          width: 32px; height: 32px; border-radius: 50%;
+          background: var(--rr-bg);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 1rem; z-index: 1; border: 1px solid var(--rr-border);
+        }
+
+        .rr-route-step.active .rr-step-bullet {
+          background: var(--rr-primary);
+          color: var(--rr-white);
+          border-color: var(--rr-primary);
+        }
+
+        .rr-step-content .label { font-size: 0.75rem; color: var(--rr-text-light); margin-bottom: 2px; }
+        .rr-step-content .name { font-size: 0.9rem; font-weight: 600; }
+
+        .btn-action-primary {
+          width: 100%; padding: 14px; border-radius: 12px;
+          background: var(--rr-primary); color: var(--rr-white);
+          border: none; font-weight: 600; cursor: pointer;
+          font-size: 0.95rem; margin-top: 16px;
+          box-shadow: 0 4px 12px rgba(139, 94, 60, 0.15);
+        }
+
+        .btn-action-secondary {
+          width: 100%; padding: 12px; border-radius: 12px;
+          background: var(--rr-white); color: var(--rr-primary);
+          border: 1px solid var(--rr-primary); font-weight: 600; cursor: pointer;
+          font-size: 0.9rem; margin-top: 12px;
+        }
+
+        .rr-stats-mini {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 24px;
+        }
+
+        .rr-mini-stat {
+          background: var(--rr-white);
+          border: 1px solid var(--rr-border);
+          padding: 16px;
+          border-radius: var(--rr-radius);
           text-align: center;
         }
-        .rr-status-toggle {
-          width: 100%; padding: 10px; border-radius: 12px; border: none;
-          background: #fff; font-weight: 700; color: ${isOnline ? '#2D5A27' : '#D96C4A'};
-          cursor: pointer; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
 
-        .rr-main { flex: 1; margin-left: 240px; padding: 32px; }
-        
-        /* Dashboard Content */
-        .rr-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
-        
-        .rr-map-container {
-          background: #fff; border-radius: 32px; border: 1px solid #f0ece4; overflow: hidden;
-          box-shadow: 0 15px 50px rgba(0,0,0,0.04);
-        }
-        .rr-map-placeholder {
-          height: 500px; background: #e0dcd4 url('https://www.transparenttextures.com/patterns/clean-gray-paper.png');
-          position: relative; display: flex; align-items: center; justify-content: center;
-        }
-        .rr-marker {
-          position: absolute; width: 48px; height: 48px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-          border: 3px solid #fff; transition: 0.3s; cursor: pointer;
-        }
-        .rr-marker:hover { transform: scale(1.2); z-index: 10; }
-        
-        .rr-order-card {
-          background: #fff; border-radius: 28px; padding: 24px;
-          border: 1px solid #f0ece4; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        }
-        .rr-order-card h3 { font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-        
-        .rr-step { display: flex; gap: 16px; margin-bottom: 20px; position: relative; }
-        .rr-step::after { content: ''; position: absolute; left: 16px; top: 32px; bottom: -20px; width: 2px; border-left: 2px dashed #f0ece4; }
-        .rr-step:last-child::after { display: none; }
-        .rr-step-icon { width: 32px; height: 32px; border-radius: 50%; background: #f0ece4; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; z-index: 1; }
-        .rr-step.active .rr-step-icon { background: var(--color-primary); color: #fff; }
-        
-        .rr-btn {
-          width: 100%; padding: 14px; border-radius: 16px; border: none;
-          font-weight: 700; cursor: pointer; transition: 0.3s; font-family: var(--font-main);
-          margin-top: 10px;
-        }
-        .rr-btn-primary { background: var(--color-primary); color: #fff; box-shadow: 0 8px 20px rgba(217,108,74,0.2); }
-        .rr-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(217,108,74,0.3); }
+        .rr-mini-stat .val { font-size: 1.2rem; font-weight: 700; color: var(--rr-primary); }
+        .rr-mini-stat .lab { font-size: 0.7rem; color: var(--rr-text-light); font-weight: 600; }
 
-        .rr-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .rr-mini-stat { background: #fff; padding: 16px; border-radius: 20px; border: 1px solid #f0ece4; }
-        .rr-mini-stat .val { font-size: 1.2rem; font-weight: 800; color: var(--color-secondary); }
-        .rr-mini-stat .lab { font-size: 0.75rem; color: var(--color-text-muted); font-weight: 700; }
+        @media (max-width: 1000px) {
+          .rr-grid { grid-template-columns: 1fr; }
+          .rr-sidebar { width: 0; display: none; }
+          .rr-main { margin-left: 0; }
+        }
       </style>
 
-      <div class="rr-layout">
-        <aside class="rr-side">
-          <div class="rr-side-logo">🛵 RASOI.</div>
+      <div class="rr-app">
+        <!-- Sidebar -->
+        <aside class="rr-sidebar">
+          <div class="rr-sidebar-logo">RASOI</div>
           
-          <div class="rr-status-card">
-            <div style="font-size:0.8rem; font-weight:700; color:${isOnline ? '#2E7D32' : '#E65100'};">
-              ${isOnline ? '● ONLINE' : '○ OFFLINE'}
+          <div class="rr-status-widget">
+            <div class="rr-status-indicator">
+              <span class="rr-status-dot"></span>
+              ${isOnline ? 'ONLINE' : 'OFFLINE'}
             </div>
-            <button class="rr-status-toggle" id="toggle-status">
+            <button class="btn-status-toggle" id="toggle-duty">
               ${isOnline ? 'Go Offline' : 'Go Online'}
             </button>
           </div>
 
-          <div style="flex:1;">
-            ${navItems.map(item => `
+          <nav class="rr-nav">
+            ${runnerNav.map(item => `
               <button class="rr-nav-item ${activeTab === item.id ? 'active' : ''}" data-id="${item.id}">
-                <span style="font-size:1.2rem;">${item.icon}</span> ${item.label}
+                <span class="material-icons-round">${item.icon}</span>
+                ${item.label}
               </button>
             `).join('')}
-          </div>
+          </nav>
 
-          <div style="padding: 0 20px;">
-            <button class="rr-nav-item" style="color:#c0392b;" onclick="window.location.hash='#/signin'">🚪 Logout</button>
+          <div style="padding: 24px 12px; border-top: 1px solid var(--rr-border);">
+            <button class="rr-nav-item" onclick="window.location.hash='#/signin'">
+              <span class="material-icons-round">logout</span>
+              Logout
+            </button>
           </div>
         </aside>
 
+        <!-- Main -->
         <main class="rr-main">
-          <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
-            <div>
-              <h2 style="font-size:1.8rem; color:var(--color-secondary);">Hello, Arjun! 👋</h2>
-              <p style="color:var(--color-text-muted);">Ready to deliver happiness today?</p>
-            </div>
-            <div style="display:flex; align-items:center; gap:16px;">
-              <div style="text-align:right;">
-                <div style="font-size:0.9rem; font-weight:700;">Arjun Das</div>
-                <div style="font-size:0.7rem; color:var(--color-text-muted);">Runner ID: #R4521</div>
+          <header class="rr-navbar">
+            <div class="rr-profile-section" style="border:none;">
+              <div class="rr-user-info" style="text-align: right;">
+                <div class="name">Arjun Das</div>
+                <div class="role">Rasoi Runner</div>
               </div>
-              <div style="width:40px; height:40px; border-radius:50%; background:var(--color-secondary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">AD</div>
+              <img src="https://i.pravatar.cc/150?u=arjun" class="rr-avatar" alt="Avatar" />
             </div>
           </header>
 
-          <div class="rr-grid">
-            <div class="rr-map-container">
-              <div style="padding:20px; display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="font-size:1rem; font-weight:700;">Live Delivery Map</h3>
-                <span style="font-size:0.8rem; color:var(--color-text-muted);">3.2 km to destination</span>
-              </div>
-              <div class="rr-map-placeholder">
-                <div class="rr-marker" style="top:20%; left:30%; background:#2D5A27;" title="Rasoi Maker">👩‍🍳</div>
-                <div class="rr-marker" style="bottom:25%; right:35%; background:#D96C4A;" title="Customer">🏠</div>
-                <div class="rr-marker" style="top:50%; left:50%; background:var(--color-secondary); animation: pulse 2s infinite;" title="You">🚴</div>
-                
-                <style>
-                  @keyframes pulse {
-                    0% { box-shadow: 0 0 0 0 rgba(45,90,39,0.4); }
-                    70% { box-shadow: 0 0 0 20px rgba(45,90,39,0); }
-                    100% { box-shadow: 0 0 0 0 rgba(45,90,39,0); }
-                  }
-                </style>
-              </div>
-            </div>
-
-            <div class="rr-panel">
-              <div class="rr-stat-row">
-                <div class="rr-mini-stat"><div class="val">14</div><div class="lab">Deliveries</div></div>
-                <div class="rr-mini-stat"><div class="val">₹850</div><div class="lab">Today</div></div>
-              </div>
-
-              <div class="rr-order-card">
-                <h3>📦 Active Order</h3>
-                <div style="padding:4px 12px; background:#f0ece4; border-radius:8px; display:inline-block; font-size:0.75rem; font-weight:800; margin-bottom:20px;">#ORD-7821</div>
-                
-                <div class="rr-step active">
-                  <div class="rr-step-icon">1</div>
+          <div class="rr-content">
+            <div class="rr-grid">
+              <!-- Map Card -->
+              <div class="rr-card">
+                <div style="padding: 24px; border-bottom: 1px solid var(--rr-border); display: flex; justify-content: space-between;">
                   <div>
-                    <div style="font-size:0.85rem; font-weight:700;">Pick up from Maker</div>
-                    <div style="font-size:0.75rem; color:var(--color-text-muted);">Madhurima's Kitchen, Salt Lake</div>
+                    <h3 style="font-weight: 700;">Live Map</h3>
+                    <p style="font-size: 0.8rem; color: var(--rr-text-light);">Deliver to New Town, Kolkata</p>
                   </div>
+                  <button class="btn-upload" style="margin: 0;">Recenter</button>
+                </div>
+                <div class="rr-map-view">
+                  <!-- Simulated markers -->
+                  <div class="rr-marker" style="top: 20%; left: 30%;">👨‍🍳</div>
+                  <div class="rr-marker me" style="top: 50%; left: 55%;">🛵</div>
+                  <div class="rr-marker" style="bottom: 25%; right: 20%;">🏠</div>
+                </div>
+              </div>
+
+              <!-- Right Panel -->
+              <div>
+                <div class="rr-stats-mini">
+                  <div class="rr-mini-stat"><div class="val">12</div><div class="lab">Deliveries</div></div>
+                  <div class="rr-mini-stat"><div class="val">₹740</div><div class="lab">Earnings</div></div>
                 </div>
 
-                <div class="rr-step">
-                  <div class="rr-step-icon">2</div>
-                  <div>
-                    <div style="font-size:0.85rem; font-weight:700;">Deliver to Customer</div>
-                    <div style="font-size:0.75rem; color:var(--color-text-muted);">Sourav Mukherjee, New Town</div>
+                <div class="rr-panel-card">
+                  <h3>Active Delivery</h3>
+                  <div class="rr-order-badge">#ORD-55291</div>
+                  
+                  <div class="rr-route-step active">
+                    <div class="rr-step-bullet"><span class="material-icons-round" style="font-size:18px;">restaurant</span></div>
+                    <div class="rr-step-content">
+                      <div class="label">Pickup Location</div>
+                      <div class="name">Madhurima's Kitchen</div>
+                      <div style="font-size: 0.75rem; color: var(--rr-text-light);">Salt Lake, Sector V</div>
+                    </div>
                   </div>
+
+                  <div class="rr-route-step">
+                    <div class="rr-step-bullet"><span class="material-icons-round" style="font-size:18px;">home</span></div>
+                    <div class="rr-step-content">
+                      <div class="label">Delivery Location</div>
+                      <div class="name">Sourav Mukherjee</div>
+                      <div style="font-size: 0.75rem; color: var(--rr-text-light);">New Town, Action Area 1</div>
+                    </div>
+                  </div>
+
+                  <button class="btn-action-primary" onclick="alert('Navigation started!')">Start Navigation</button>
+                  <button class="btn-action-secondary" onclick="alert('Marked as Picked Up')">Confirm Pickup</button>
                 </div>
 
-                <button class="rr-btn rr-btn-primary" style="margin-top:20px;" onclick="alert('Navigation Started!')">📍 Start Navigation</button>
-                <button class="rr-btn" style="background:#f0ece4; color:var(--color-secondary);" onclick="alert('Order Picked Up!')">✅ Marked as Picked Up</button>
-              </div>
-
-              <div class="rr-order-card" style="margin-top:20px;">
-                <h3>💬 Quick Chat</h3>
-                <div style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:12px;">Contact Customer</div>
-                <button class="rr-btn" style="background:#fff; border:1.5px solid #f0ece4; color:var(--color-primary);" onclick="alert('Calling Customer...')">📞 Call Sourav</button>
+                <div class="rr-panel-card">
+                  <h3>Quick Support</h3>
+                  <p style="font-size: 0.85rem; color: var(--rr-text-light); margin-bottom: 16px;">Need help with the current order?</p>
+                  <button class="btn-action-secondary" style="border-color: #E8E4DF; color: var(--rr-text);">Contact Support</button>
+                </div>
               </div>
             </div>
           </div>
@@ -198,7 +404,7 @@ export function RunnersDashboard() {
       </div>
     `;
 
-    container.querySelector('#toggle-status')!.addEventListener('click', () => {
+    container.querySelector('#toggle-duty')!.addEventListener('click', () => {
       isOnline = !isOnline;
       render();
     });

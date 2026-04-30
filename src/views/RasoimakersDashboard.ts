@@ -1,210 +1,596 @@
 const sidebarItems = [
-  { icon: '📊', label: 'Dashboard', id: 'dashboard' },
-  { icon: '🍽️', label: 'My Dishes', id: 'my-dishes' },
-  { icon: '➕', label: 'Add New Dish', id: 'add-dish' },
-  { icon: '📦', label: 'Orders', id: 'orders' },
-  { icon: '💰', label: 'Earnings', id: 'earnings' },
-  { icon: '⭐', label: 'Reviews', id: 'reviews' },
-  { icon: '👤', label: 'Profile', id: 'profile' },
-  { icon: '❓', label: 'Help', id: 'help' },
+  { icon: 'grid-view', label: 'Dashboard', id: 'dashboard' },
+  { icon: 'restaurant', label: 'My Dishes', id: 'my-dishes' },
+  { icon: 'add_circle', label: 'Add New Dish', id: 'add-dish' },
+  { icon: 'shopping_bag', label: 'Orders', id: 'orders' },
+  { icon: 'payments', label: 'Earnings', id: 'earnings' },
+  { icon: 'star', label: 'Reviews', id: 'reviews' },
+  { icon: 'person', label: 'Profile', id: 'profile' },
+  { icon: 'help', label: 'Help & Support', id: 'help' },
 ];
 
 export function RasoimakersDashboard() {
   const container = document.createElement('div');
-  let activeTab = 'dashboard';
+  let activeTab = 'add-dish';
+  
+  // Form State
   let spiceLevel = 'Mild';
   let foodType = 'Veg';
   let mealType = 'Lunch';
+  const preferences: string[] = ['Satvik'];
 
   function render() {
     container.innerHTML = `
       <style>
-        .rm-layout { display: flex; min-height: 100vh; background: #fdfaf5; font-family: var(--font-main); }
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
+
+        :root {
+          --rm-bg: #F8F5F0;
+          --rm-primary: #8B5E3C;
+          --rm-secondary: #E8DCCB;
+          --rm-text: #2D2A26;
+          --rm-text-light: #6D6A66;
+          --rm-border: #E8E4DF;
+          --rm-white: #FFFFFF;
+          --rm-radius: 12px;
+        }
+
+        .rm-app {
+          display: flex;
+          min-height: 100vh;
+          background-color: var(--rm-bg);
+          color: var(--rm-text);
+          font-family: 'Inter', sans-serif;
+          -webkit-font-smoothing: antialiased;
+        }
+
         /* Sidebar */
-        .rm-side {
-          width: 260px; background: #fff; border-right: 1px solid #f0ece4;
-          display: flex; flex-direction: column; padding: 32px 0;
-          position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+        .rm-sidebar {
+          width: 240px;
+          background: var(--rm-white);
+          border-right: 1px solid var(--rm-border);
+          display: flex;
+          flex-direction: column;
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 100;
         }
-        .rm-side-logo { padding: 0 32px 40px; font-size: 1.8rem; font-weight: 800; color: var(--color-secondary); letter-spacing: -1px; }
-        
+
+        .rm-sidebar-logo {
+          padding: 32px 24px;
+          font-family: 'Playfair Display', serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--rm-primary);
+          letter-spacing: 0.5px;
+        }
+
+        .rm-nav {
+          flex: 1;
+          padding: 0 12px;
+        }
+
         .rm-nav-item {
-          display: flex; align-items: center; gap: 16px; padding: 14px 32px;
-          cursor: pointer; transition: 0.3s; color: var(--color-text-muted);
-          font-weight: 600; border: none; background: none; width: 100%; text-align: left;
-          font-family: var(--font-main); font-size: 0.95rem;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          margin-bottom: 4px;
+          border-radius: var(--rm-radius);
+          cursor: pointer;
+          color: var(--rm-text-light);
+          font-size: 0.9rem;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          border: none;
+          background: none;
+          width: 100%;
+          text-align: left;
         }
-        .rm-nav-item:hover { color: var(--color-primary); background: #fffaf8; }
+
+        .rm-nav-item:hover {
+          background-color: var(--rm-bg);
+          color: var(--rm-text);
+        }
+
         .rm-nav-item.active {
-          color: var(--color-primary); background: #fffaf8;
-          border-right: 4px solid var(--color-primary);
+          background-color: var(--rm-secondary);
+          color: var(--rm-primary);
+          font-weight: 600;
         }
-        .rm-nav-item .icon { font-size: 1.2rem; }
 
-        .rm-main { flex: 1; margin-left: 260px; padding: 40px 60px; }
-        .rm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .rm-header h2 { font-size: 2rem; color: var(--color-secondary); }
-        
-        .rm-user-pill {
-          display: flex; align-items: center; gap: 12px; background: #fff;
-          padding: 8px 20px; border-radius: 40px; border: 1px solid #f0ece4;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        .rm-nav-item .material-icons-round {
+          font-size: 20px;
         }
-        .rm-user-pill .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
 
-        /* Dashboard Overview */
-        .rm-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
-        .rm-stat-card { background: #fff; padding: 24px; border-radius: 24px; border: 1px solid #f0ece4; box-shadow: 0 8px 24px rgba(0,0,0,0.02); }
-        .rm-stat-card .label { font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 8px; font-weight: 600; }
-        .rm-stat-card .value { font-size: 1.8rem; font-weight: 800; color: var(--color-secondary); }
-        .rm-stat-card .trend { font-size: 0.75rem; color: #2D5A27; font-weight: 700; margin-top: 4px; }
+        .rm-logout {
+          padding: 24px 12px;
+          border-top: 1px solid var(--rm-border);
+        }
 
-        /* Add Dish Form */
-        .rm-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-        .rm-card { background: #fff; padding: 32px; border-radius: 32px; border: 1px solid #f0ece4; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .rm-card h3 { font-size: 1.2rem; color: var(--color-secondary); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-        
-        .rm-upload {
-          width: 100%; height: 240px; border-radius: 24px; border: 2px dashed #f0ece4;
-          display: flex; flex-direction: column; align-items: center; justify-content: center;
-          cursor: pointer; transition: 0.3s; background: #fffaf8; overflow: hidden; position: relative;
+        /* Main Content */
+        .rm-main {
+          flex: 1;
+          margin-left: 240px;
+          display: flex;
+          flex-direction: column;
         }
-        .rm-upload:hover { border-color: var(--color-primary); background: #fff5f0; }
-        .rm-upload img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .field { margin-bottom: 20px; }
-        .field label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--color-secondary); margin-bottom: 8px; }
-        .field input, .field select, .field textarea {
-          width: 100%; padding: 14px 18px; border: 1.5px solid #f0ece4; border-radius: 16px;
-          font-family: var(--font-main); font-size: 0.95rem; outline: none; transition: 0.3s;
-          background: #fdfaf5;
-        }
-        .field input:focus { border-color: var(--color-primary); background: #fff; }
 
-        .rm-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
-        .rm-tag {
-          padding: 8px 16px; border-radius: 12px; border: 1.5px solid #f0ece4;
-          font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s;
-          background: #fff; color: var(--color-text-muted);
+        /* Navbar */
+        .rm-navbar {
+          height: 72px;
+          background: var(--rm-white);
+          border-bottom: 1px solid var(--rm-border);
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 0 40px;
+          gap: 24px;
+          position: sticky;
+          top: 0;
+          z-index: 90;
         }
-        .rm-tag.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(217,108,74,0.2); }
-        
-        .rm-actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 40px; padding: 24px 0; border-top: 1px solid #f0ece4; }
-        .btn-ghost { padding: 14px 28px; border-radius: 16px; border: 1.5px solid #f0ece4; font-weight: 700; cursor: pointer; background: none; font-family: var(--font-main); }
-        .btn-fill { padding: 14px 32px; border-radius: 16px; border: none; background: var(--color-primary); color: #fff; font-weight: 700; cursor: pointer; font-family: var(--font-main); box-shadow: 0 8px 24px rgba(217,108,74,0.2); }
+
+        .rm-nav-action {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: var(--rm-text-light);
+          font-size: 0.85rem;
+          font-weight: 500;
+          cursor: pointer;
+        }
+
+        .rm-nav-action .material-icons-round {
+          font-size: 20px;
+        }
+
+        .rm-profile-section {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding-left: 24px;
+          border-left: 1px solid var(--rm-border);
+        }
+
+        .rm-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: var(--rm-secondary);
+          object-fit: cover;
+        }
+
+        .rm-user-info .name {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--rm-text);
+        }
+
+        .rm-user-info .role {
+          font-size: 0.75rem;
+          color: var(--rm-text-light);
+        }
+
+        /* Content Area */
+        .rm-content {
+          padding: 48px 80px;
+          max-width: 1200px;
+        }
+
+        .rm-header {
+          margin-bottom: 40px;
+        }
+
+        .rm-header h1 {
+          font-family: 'Playfair Display', serif;
+          font-size: 2rem;
+          margin-bottom: 8px;
+          color: var(--rm-text);
+        }
+
+        .rm-header p {
+          color: var(--rm-text-light);
+          font-size: 0.95rem;
+        }
+
+        /* Form Sections */
+        .rm-section {
+          background: var(--rm-white);
+          border-radius: var(--rm-radius);
+          border: 1px solid var(--rm-border);
+          padding: 32px;
+          margin-bottom: 24px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .rm-section-title {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 24px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        /* Upload Box */
+        .rm-upload-container {
+          display: grid;
+          grid-template-columns: 280px 1fr;
+          gap: 32px;
+          align-items: flex-start;
+        }
+
+        .rm-photo-box {
+          width: 100%;
+          aspect-ratio: 1;
+          background: var(--rm-bg);
+          border-radius: var(--rm-radius);
+          border: 1px dashed var(--rm-border);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .rm-photo-box img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .rm-upload-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .btn-upload {
+          padding: 10px 20px;
+          border-radius: 8px;
+          border: 1px solid var(--rm-primary);
+          background: var(--rm-white);
+          color: var(--rm-primary);
+          font-weight: 600;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s;
+          width: fit-content;
+        }
+
+        .btn-upload:hover {
+          background: var(--rm-secondary);
+        }
+
+        .file-note {
+          font-size: 0.75rem;
+          color: var(--rm-text-light);
+        }
+
+        /* Inputs */
+        .rm-form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+        }
+
+        .field-group {
+          margin-bottom: 20px;
+        }
+
+        .field-group label {
+          display: block;
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: var(--rm-text);
+        }
+
+        .rm-input, .rm-select, .rm-textarea {
+          width: 100%;
+          padding: 12px 16px;
+          border-radius: 8px;
+          border: 1px solid var(--rm-border);
+          background: var(--rm-bg);
+          font-family: inherit;
+          font-size: 0.95rem;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .rm-input:focus, .rm-select:focus, .rm-textarea:focus {
+          border-color: var(--rm-primary);
+        }
+
+        .rm-textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+
+        .char-limit {
+          display: block;
+          text-align: right;
+          font-size: 0.75rem;
+          color: var(--rm-text-light);
+          margin-top: 4px;
+        }
+
+        /* Toggle Buttons */
+        .rm-toggle-group {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .rm-toggle-btn {
+          padding: 8px 16px;
+          border-radius: 20px;
+          border: 1px solid var(--rm-border);
+          background: var(--rm-white);
+          font-size: 0.85rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .rm-toggle-btn:hover {
+          border-color: var(--rm-primary);
+        }
+
+        .rm-toggle-btn.active {
+          background: var(--rm-primary);
+          color: var(--rm-white);
+          border-color: var(--rm-primary);
+        }
+
+        /* Checkboxes */
+        .rm-check-group {
+          display: flex;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+
+        .rm-check-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          cursor: pointer;
+        }
+
+        .rm-check-item input {
+          width: 18px;
+          height: 18px;
+          accent-color: var(--rm-primary);
+        }
+
+        /* Bottom Actions */
+        .rm-footer-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 16px;
+          padding-top: 24px;
+          border-top: 1px solid var(--rm-border);
+        }
+
+        .btn-secondary {
+          padding: 12px 28px;
+          border-radius: 8px;
+          border: 1px solid var(--rm-border);
+          background: var(--rm-white);
+          color: var(--rm-text);
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 0.95rem;
+        }
+
+        .btn-primary-brown {
+          padding: 12px 36px;
+          border-radius: 8px;
+          border: none;
+          background: var(--rm-primary);
+          color: var(--rm-white);
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 0.95rem;
+          box-shadow: 0 4px 12px rgba(139, 94, 60, 0.15);
+        }
+
+        .btn-primary-brown:hover {
+          opacity: 0.95;
+          transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+          .rm-sidebar { width: 0; display: none; }
+          .rm-main { margin-left: 0; }
+          .rm-content { padding: 32px 20px; }
+          .rm-form-grid { grid-template-columns: 1fr; }
+          .rm-upload-container { grid-template-columns: 1fr; }
+        }
       </style>
 
-      <div class="rm-layout">
-        <aside class="rm-side">
-          <div class="rm-side-logo">RASOI.</div>
-          ${sidebarItems.map(item => `
-            <button class="rm-nav-item ${activeTab === item.id ? 'active' : ''}" data-id="${item.id}">
-              <span class="icon">${item.icon}</span> ${item.label}
+      <div class="rm-app">
+        <!-- Sidebar -->
+        <aside class="rm-sidebar">
+          <div class="rm-sidebar-logo">RASOI</div>
+          <nav class="rm-nav">
+            ${sidebarItems.map(item => `
+              <button class="rm-nav-item ${activeTab === item.id ? 'active' : ''}" data-id="${item.id}">
+                <span class="material-icons-round">${item.icon}</span>
+                ${item.label}
+              </button>
+            `).join('')}
+          </nav>
+          <div class="rm-logout">
+            <button class="rm-nav-item" onclick="window.location.hash='#/signin'">
+              <span class="material-icons-round">logout</span>
+              Logout
             </button>
-          `).join('')}
-          <div style="margin-top:auto; padding: 0 20px;">
-            <button class="rm-nav-item" style="color:#c0392b;" onclick="window.location.hash='#/signin'">🚪 Logout</button>
           </div>
         </aside>
 
+        <!-- Main Area -->
         <main class="rm-main">
-          <header class="rm-header">
-            <h2>${activeTab.replace('-', ' ').toUpperCase()}</h2>
-            <div class="rm-user-pill">
+          <header class="rm-navbar">
+            <div class="rm-nav-action">
               <span>English</span>
-              <div class="avatar">AD</div>
-              <div style="text-align:right;">
-                <div style="font-size:0.85rem; font-weight:700;">Ananya D.</div>
-                <div style="font-size:0.7rem; color:var(--color-text-muted);">Rasoi Maker</div>
+              <span class="material-icons-round">expand_more</span>
+            </div>
+            <div class="rm-nav-action">
+              <span class="material-icons-round">notifications</span>
+            </div>
+            <div class="rm-profile-section">
+              <div class="rm-user-info" style="text-align: right;">
+                <div class="name">Ananya D.</div>
+                <div class="role">Rasoi Maker</div>
               </div>
+              <img src="https://i.pravatar.cc/150?u=ananya" class="rm-avatar" alt="Avatar" />
             </div>
           </header>
 
-          ${activeTab === 'dashboard' ? `
-            <div class="rm-stats">
-              <div class="rm-stat-card"><div class="label">Total Orders</div><div class="value">128</div><div class="trend">+12% this week</div></div>
-              <div class="rm-stat-card"><div class="label">Total Earnings</div><div class="value">₹14,520</div><div class="trend">+8% this week</div></div>
-              <div class="rm-stat-card"><div class="label">Average Rating</div><div class="value">4.9 ⭐</div><div class="trend">12 new reviews</div></div>
-              <div class="rm-stat-card"><div class="label">Active Dishes</div><div class="value">12</div><div class="trend">Top rated kitchen</div></div>
+          <div class="rm-content">
+            <div class="rm-header">
+              <h1>Add New Dish</h1>
+              <p>Share your homemade food with care</p>
             </div>
-            
-            <div class="rm-card">
-              <h3>Recent Orders</h3>
-              <p style="color:var(--color-text-muted);">You have 3 orders pending for pickup today.</p>
-              <button class="btn-fill" style="margin-top:20px;" onclick="document.querySelector('[data-id=orders]').click()">View All Orders</button>
-            </div>
-          ` : activeTab === 'add-dish' ? `
-            <div class="rm-form-grid">
-              <div class="rm-card">
-                <h3>📸 Dish Photo</h3>
-                <div class="rm-upload" id="upload-box">
-                  <div style="text-align:center;">
-                    <div style="font-size:2rem; margin-bottom:10px;">📸</div>
-                    <div style="font-weight:700; color:var(--color-primary);">Click to Upload Photo</div>
-                    <div style="font-size:0.8rem; color:var(--color-text-muted);">Recommended size: 1080x1080px</div>
-                  </div>
+
+            <!-- Section 1: Photo -->
+            <section class="rm-section">
+              <h2 class="rm-section-title">1. Dish Photo</h2>
+              <div class="rm-upload-container">
+                <div class="rm-photo-box" id="upload-trigger">
+                  <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80" alt="Placeholder" id="preview-img" />
                 </div>
-                
-                <div class="field" style="margin-top:24px;">
+                <div class="rm-upload-actions">
+                  <p style="font-size: 0.9rem; color: var(--rm-text-light);">Upload a clear photo of your dish</p>
+                  <button class="btn-upload">Upload / Change Photo</button>
+                  <span class="file-note">JPG, PNG up to 5MB</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 2: Basic Details -->
+            <section class="rm-section">
+              <h2 class="rm-section-title">2. Basic Details</h2>
+              <div class="rm-form-grid">
+                <div class="field-group">
                   <label>Dish Name</label>
-                  <input type="text" placeholder="e.g. Traditional Fish Curry" />
+                  <input type="text" class="rm-input" placeholder="e.g. Bengali Moong Dal" />
                 </div>
-                <div class="field">
+                <div class="field-group">
+                  <label>Category</label>
+                  <select class="rm-select">
+                    <option>Lunch</option>
+                    <option>Breakfast</option>
+                    <option>Dinner</option>
+                    <option>Snack</option>
+                  </select>
+                </div>
+                <div class="field-group">
                   <label>Price (₹)</label>
-                  <input type="number" placeholder="150" />
+                  <input type="number" class="rm-input" placeholder="120" />
+                </div>
+                <div class="field-group">
+                  <label>Serves</label>
+                  <select class="rm-select">
+                    <option>1 Person</option>
+                    <option>2 Persons</option>
+                    <option>3 Persons</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 3: Description -->
+            <section class="rm-section">
+              <h2 class="rm-section-title">3. Description</h2>
+              <div class="field-group">
+                <label>Ingredients</label>
+                <textarea class="rm-textarea" placeholder="List the key ingredients used..."></textarea>
+                <span class="char-limit">0 / 300</span>
+              </div>
+              <div class="field-group">
+                <label>Taste & Flavour</label>
+                <textarea class="rm-textarea" placeholder="Describe the taste profile..."></textarea>
+                <span class="char-limit">0 / 300</span>
+              </div>
+            </section>
+
+            <!-- Section 4: Additional Info -->
+            <section class="rm-section">
+              <h2 class="rm-section-title">4. Additional Information</h2>
+              
+              <div class="field-group">
+                <label>Spice Level</label>
+                <div class="rm-toggle-group">
+                  ${['Mild', 'Medium', 'Spicy'].map(s => `
+                    <button class="rm-toggle-btn ${spiceLevel === s ? 'active' : ''}" data-type="spice" data-val="${s}">${s}</button>
+                  `).join('')}
                 </div>
               </div>
 
-              <div class="rm-card">
-                <h3>📋 Specifications</h3>
-                <div class="field">
-                  <label>Spice Level</label>
-                  <div class="rm-tags">
-                    ${['Mild', 'Medium', 'Spicy', 'Extra Spicy'].map(s => `<div class="rm-tag ${spiceLevel === s ? 'active' : ''}" data-type="spice" data-val="${s}">${s}</div>`).join('')}
-                  </div>
-                </div>
-                <div class="field">
-                  <label>Food Type</label>
-                  <div class="rm-tags">
-                    ${['Veg', 'Non-Veg', 'Eggetarian'].map(s => `<div class="rm-tag ${foodType === s ? 'active' : ''}" data-type="food" data-val="${s}">${s}</div>`).join('')}
-                  </div>
-                </div>
-                <div class="field">
-                  <label>Meal Type</label>
-                  <div class="rm-tags">
-                    ${['Breakfast', 'Lunch', 'Dinner', 'Snack'].map(s => `<div class="rm-tag ${mealType === s ? 'active' : ''}" data-type="meal" data-val="${s}">${s}</div>`).join('')}
-                  </div>
+              <div class="field-group">
+                <label>Food Type</label>
+                <div class="rm-toggle-group">
+                  ${['Veg', 'Non-Veg', 'Eggetarian'].map(s => `
+                    <button class="rm-toggle-btn ${foodType === s ? 'active' : ''}" data-type="food" data-val="${s}">${s}</button>
+                  `).join('')}
                 </div>
               </div>
-            </div>
 
-            <div class="rm-actions">
-              <button class="btn-ghost">Save Draft</button>
-              <button class="btn-fill" onclick="alert('Dish Published Successfully!')">🚀 Publish Dish</button>
+              <div class="field-group">
+                <label>Meal Type</label>
+                <div class="rm-toggle-group">
+                  ${['Breakfast', 'Lunch', 'Dinner', 'Snack'].map(s => `
+                    <button class="rm-toggle-btn ${mealType === s ? 'active' : ''}" data-type="meal" data-val="${s}">${s}</button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>Food Preferences</label>
+                <div class="rm-check-group">
+                  ${['Jain', 'Satvik', 'No Onion', 'No Garlic'].map(s => `
+                    <label class="rm-check-item">
+                      <input type="checkbox" ${preferences.includes(s) ? 'checked' : ''} />
+                      ${s}
+                    </label>
+                  `).join('')}
+                </div>
+              </div>
+            </section>
+
+            <!-- Actions -->
+            <div class="rm-footer-actions">
+              <button class="btn-secondary">Save as Draft</button>
+              <button class="btn-primary-brown">Publish Dish</button>
             </div>
-          ` : `
-            <div class="rm-card" style="text-align:center; padding:100px;">
-              <div style="font-size:4rem; margin-bottom:20px;">🚧</div>
-              <h3>${activeTab.replace('-', ' ').toUpperCase()} Section</h3>
-              <p>This part of the dashboard is coming soon.</p>
-            </div>
-          `}
+          </div>
         </main>
       </div>
     `;
 
+    // Interactivity
     container.querySelectorAll('.rm-nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = (btn as HTMLElement).dataset.id;
-        if (id) { activeTab = id; render(); }
+        if (id) {
+          activeTab = id;
+          render();
+        }
       });
     });
 
-    container.querySelectorAll('.rm-tag').forEach(tag => {
-      tag.addEventListener('click', () => {
-        const type = (tag as HTMLElement).dataset.type;
-        const val = (tag as HTMLElement).dataset.val || '';
+    container.querySelectorAll('.rm-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = (btn as HTMLElement).dataset.type;
+        const val = (btn as HTMLElement).dataset.val || '';
         if (type === 'spice') spiceLevel = val;
         if (type === 'food') foodType = val;
         if (type === 'meal') mealType = val;
