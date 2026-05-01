@@ -11,27 +11,33 @@ export function CookProfiles() {
   ];
 
   container.innerHTML = `
-    <div style="text-align: center; margin-bottom: 64px;">
-      <h1 style="font-size: 3rem; color: var(--color-secondary); margin-bottom: 16px;">Our Rasoimakers</h1>
-      <p style="color: var(--color-text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">
+    <div style="text-align:center;margin-bottom:64px;position:relative;">
+      <div style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:120px;height:4px;background:linear-gradient(90deg,transparent,var(--color-primary),transparent);border-radius:2px;"></div>
+      <span style="display:inline-block;font-size:0.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--color-primary);margin-bottom:12px;background:rgba(217,107,59,0.08);padding:6px 16px;border-radius:20px;">👩‍🍳 HOME CHEFS</span>
+      <h1 style="font-family:'Playfair Display',serif;font-size:3.2rem;color:var(--color-secondary);margin-bottom:16px;font-weight:700;letter-spacing:-0.5px;" data-translate="ourRasoimakers">Our Rasoimakers</h1>
+      <p style="color:var(--color-text-muted);max-width:600px;margin:0 auto;font-size:1.1rem;line-height:1.7;" data-translate="ourRasoimakersDesc">
         Meet the talented home chefs bringing the warmth of traditional kitchens straight to your table.
       </p>
+      <div style="position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:linear-gradient(90deg,transparent,var(--color-secondary),transparent);border-radius:2px;"></div>
     </div>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 32px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:32px;">
       ${cooks.map(cook => `
-        <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <div style="width: 100px; height: 100px; border-radius: 50%; background-color: var(--color-secondary-light); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--color-secondary); margin-bottom: 16px;">
-            ${cook.name.charAt(0)}
+        <div class="glass-card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;border-top:4px solid ${cook.rating >= 4.8 ? 'var(--color-primary)' : 'var(--color-secondary)'};">
+          <div style="width:100%;padding:28px 24px 0;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:96px;height:96px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));margin-bottom:16px;">
+              <div style="width:100%;height:100%;border-radius:50%;background:var(--color-secondary-light);display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:bold;color:var(--color-secondary);">
+                ${cook.name.charAt(0)}
+              </div>
+            </div>
+            <h3 style="font-size:1.4rem;color:var(--color-secondary);margin-bottom:6px;font-family:'Playfair Display',serif;">${cook.name}</h3>
+            <p style="color:var(--color-primary);font-weight:600;margin-bottom:6px;font-size:1.05rem;">★ ${cook.rating} <span style="color:var(--color-text-muted);font-weight:normal;font-size:0.85rem;">(${cook.reviews} reviews)</span></p>
+            <div style="background:rgba(31,77,43,0.06);padding:6px 14px;border-radius:16px;margin-bottom:6px;font-size:0.88rem;font-weight:500;color:var(--color-secondary);">${cook.specialty}</div>
+            <p style="color:var(--color-text-muted);font-size:0.85rem;margin-bottom:20px;">📍 ${cook.location}</p>
           </div>
-          <h3 style="font-size: 1.5rem; color: var(--color-secondary); margin-bottom: 4px;">${cook.name}</h3>
-          <p style="color: var(--color-primary); font-weight: 600; margin-bottom: 8px;">★ ${cook.rating} <span style="color: var(--color-text-muted); font-weight: normal; font-size: 0.9rem;">(${cook.reviews} reviews)</span></p>
-          <p style="color: var(--color-text-main); font-size: 0.95rem; margin-bottom: 4px;">${cook.specialty}</p>
-          <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 24px;">📍 ${cook.location}</p>
-          
-          <div style="display: flex; gap: 12px; width: 100%;">
-            <button class="btn-primary rate-btn" data-id="${cook.id}" data-name="${cook.name}" style="flex: 1; padding: 8px;">Rate</button>
-            <button class="btn-secondary complain-btn" data-id="${cook.id}" data-name="${cook.name}" style="flex: 1; padding: 8px; border-color: #e53e3e; color: #e53e3e;">Complain</button>
+          <div style="display:flex;gap:10px;width:100%;padding:0 24px 24px;">
+            <button class="btn-primary rate-btn" data-id="${cook.id}" data-name="${cook.name}" style="flex:1;padding:10px;" data-translate="rate">Rate</button>
+            <button class="btn-secondary complain-btn" data-id="${cook.id}" data-name="${cook.name}" style="flex:1;padding:10px;background:linear-gradient(135deg,#c62828,#e53e3e);box-shadow:0 4px 12px rgba(229,62,62,0.2);" data-translate="complain">Complain</button>
           </div>
         </div>
       `).join('')}

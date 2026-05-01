@@ -1,3 +1,5 @@
+import { loginUser, getCart } from '../store/cartStore';
+
 export function SignIn() {
   const container = document.createElement('div');
   let selectedRole = '';
@@ -201,10 +203,6 @@ export function SignIn() {
           </div>
 
           <button class="btn-continue" id="si-btn-continue" disabled>Continue</button>
-          
-          <p style="margin-top: 24px; font-size: 0.85rem; color: var(--si-text-light);">
-            New to RASOI? <a href="#" style="color: var(--si-primary); font-weight: 700; text-decoration: none;">Join the family</a>
-          </p>
         </div>
       </div>
     `;
@@ -221,22 +219,28 @@ export function SignIn() {
       });
     });
 
-    btn.addEventListener('click', renderLoginForm);
+    btn.addEventListener('click', () => renderAuthForm('signin'));
   }
 
-  function renderLoginForm() {
+  function renderAuthForm(mode: 'signin' | 'signup') {
     let activeTab = 'email';
     const roleLabel = selectedRole.replace('-', ' ').toUpperCase();
 
     function build() {
+      const isSignup = mode === 'signup';
+      const toggleMode = isSignup ? 'signin' : 'signup';
+      const toggleText = isSignup ? 'Already have an account? Sign In' : 'New to RASOI? Join the family (Sign Up)';
+      const title = isSignup ? 'Create Account' : 'Sign In';
+      const subtitle = isSignup ? `Join as a ${roleLabel}` : `Access your ${roleLabel} account`;
+
       container.querySelector('.si-card')!.innerHTML = `
         <div class="si-back" id="si-btn-back">
           <span class="material-icons-round" style="font-size: 18px;">arrow_back</span>
           Back to roles
         </div>
         <div class="si-logo">RASOI</div>
-        <h2 class="si-title">Sign In</h2>
-        <p class="si-subtitle">Access your ${roleLabel} account</p>
+        <h2 class="si-title">${title}</h2>
+        <p class="si-subtitle">${subtitle}</p>
 
         <div class="si-tabs">
           <button class="si-tab ${activeTab === 'email' ? 'active' : ''}" data-tab="email">Email</button>
@@ -244,6 +248,12 @@ export function SignIn() {
         </div>
 
         <form id="si-main-form">
+          ${isSignup ? `
+            <div class="si-field">
+              <label>Full Name</label>
+              <input type="text" class="si-input" placeholder="Rahul Sharma" required />
+            </div>
+          ` : ''}
           ${activeTab === 'email' ? `
             <div class="si-field">
               <label>Email Address</label>
@@ -262,17 +272,26 @@ export function SignIn() {
           <div class="si-field">
             <div style="display: flex; justify-content: space-between;">
               <label>Password</label>
-              <a href="#" style="font-size: 0.75rem; color: var(--si-primary); font-weight: 600; text-decoration: none;">Forgot?</a>
+              ${!isSignup ? `<a href="#" style="font-size: 0.75rem; color: var(--si-primary); font-weight: 600; text-decoration: none;">Forgot?</a>` : ''}
             </div>
-            <input type="password" class="si-input" placeholder="••••••••" required />
+            <input type="password" class="si-input" placeholder="••••••••" required minlength="6" />
           </div>
 
-          <button type="submit" class="btn-continue" style="margin-top: 12px;">Sign In</button>
+          <button type="submit" class="btn-continue" style="margin-top: 12px;">${isSignup ? 'Create Account' : 'Sign In'}</button>
         </form>
+
+        <p style="margin-top: 24px; font-size: 0.85rem; color: var(--si-text-light);">
+          <a href="#" id="toggle-auth-mode" style="color: var(--si-primary); font-weight: 700; text-decoration: none;">${toggleText}</a>
+        </p>
       `;
 
       container.querySelector('#si-btn-back')!.addEventListener('click', renderRoleSelector);
       
+      container.querySelector('#toggle-auth-mode')!.addEventListener('click', (e) => {
+        e.preventDefault();
+        renderAuthForm(toggleMode);
+      });
+
       container.querySelectorAll('.si-tab').forEach(tab => {
         tab.addEventListener('click', () => {
           activeTab = (tab as HTMLElement).dataset.tab || 'email';
@@ -282,9 +301,21 @@ export function SignIn() {
 
       container.querySelector('#si-main-form')!.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (selectedRole === 'rasoimakers') window.location.hash = '#/dashboard/rasoimakers';
-        else if (selectedRole === 'rasoi-runners') window.location.hash = '#/dashboard/runners';
-        else window.location.hash = '#/';
+        
+        if (selectedRole === 'user') {
+          loginUser(); // Login the user globally
+          
+          const cart = getCart();
+          if (cart.length > 0) {
+            window.location.hash = '#/checkout';
+          } else {
+            window.location.hash = '#/';
+          }
+        } else if (selectedRole === 'rasoimakers') {
+          window.location.hash = '#/dashboard/rasoimakers';
+        } else if (selectedRole === 'rasoi-runners') {
+          window.location.hash = '#/dashboard/runners';
+        }
       });
     }
 

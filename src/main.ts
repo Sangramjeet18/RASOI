@@ -37,11 +37,15 @@ class Router {
     if (this.currentPath === '#/dashboard/rasoimakers') {
       this.appElement.appendChild(RasoimakersDashboard());
       window.scrollTo(0, 0);
+      const savedLang = localStorage.getItem('lang') || 'English';
+      applyTranslations(savedLang);
       return;
     }
     if (this.currentPath === '#/dashboard/runners') {
       this.appElement.appendChild(RunnersDashboard());
       window.scrollTo(0, 0);
+      const savedLang = localStorage.getItem('lang') || 'English';
+      applyTranslations(savedLang);
       return;
     }
     

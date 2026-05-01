@@ -2,13 +2,16 @@ import { applyTranslations } from '../i18n/translations';
 
 export function Navbar() {
   const nav = document.createElement('nav');
-  nav.style.position = 'absolute';
+  nav.style.position = 'fixed';
   nav.style.top = '0';
   nav.style.left = '0';
   nav.style.right = '0';
   nav.style.zIndex = '100';
-  nav.style.padding = '24px 80px';
-  nav.style.background = 'transparent';
+  nav.style.padding = '16px 80px';
+  nav.style.background = 'rgba(245, 233, 218, 0.7)';
+  nav.style.backdropFilter = 'blur(20px) saturate(1.4)';
+  nav.style.borderBottom = '1px solid rgba(255,255,255,0.3)';
+  nav.style.boxShadow = '0 4px 24px rgba(0,0,0,0.04)';
 
   // Inject CSS for Navbar hover effects and custom dropdown
   const styleId = 'navbar-styles';
@@ -18,12 +21,13 @@ export function Navbar() {
     style.innerHTML = `
       .nav-link {
         color: var(--color-text-main);
-        font-weight: 600;
-        font-size: 1.05rem;
-        letter-spacing: 0.3px;
+        font-weight: 500;
+        font-size: 0.92rem;
+        letter-spacing: 0.2px;
         position: relative;
         padding-bottom: 4px;
-        transition: color 0.2s ease;
+        transition: color 0.25s ease;
+        white-space: nowrap;
       }
       .nav-link:hover {
         color: var(--color-primary);
@@ -34,9 +38,11 @@ export function Navbar() {
         width: 0;
         height: 2px;
         bottom: 0;
-        left: 0;
-        background-color: var(--color-primary);
-        transition: width 0.3s ease;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(90deg, var(--color-primary), #E07A4C);
+        border-radius: 1px;
+        transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
       }
       .nav-link:hover::after {
         width: 100%;
@@ -112,11 +118,11 @@ export function Navbar() {
 
   nav.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1400px; margin: 0 auto;">
-      <a href="#/" style="font-size: 1.8rem; font-weight: 800; color: var(--color-secondary); letter-spacing: 0.5px;">
-        RASOI.
+      <a href="#/" style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--color-secondary); letter-spacing: 3px; display: flex; align-items: center; gap: 2px; text-transform: uppercase;">
+        <span style="background: linear-gradient(135deg, var(--color-secondary) 0%, #2A6338 50%, var(--color-primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">RASOI</span><span style="color: var(--color-primary); font-size: 2.4rem; line-height: 1;">.</span>
       </a>
       
-      <div style="display: flex; gap: 48px; align-items: center;">
+      <div style="display: flex; gap: 36px; align-items: center;">
         <a href="#/" class="nav-link" data-translate="home">Home</a>
         <a href="#/menu" class="nav-link" data-translate="menu">Menu</a>
         <a href="#/subscriptions" class="nav-link" data-translate="subscriptions">Subscriptions</a>

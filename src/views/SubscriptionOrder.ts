@@ -1,14 +1,14 @@
 const mealOptions = [
-  { name: 'Ilish Macher Jhol Thali', category: 'Non-Veg', price: 499 },
-  { name: 'Kosha Mangsho Thali', category: 'Non-Veg', price: 449 },
-  { name: 'Chingri Malai Curry Thali', category: 'Non-Veg', price: 429 },
-  { name: 'Chicken Dakbungalow Thali', category: 'Non-Veg', price: 349 },
-  { name: 'Shukto & Rice Thali', category: 'Veg', price: 219 },
-  { name: 'Dhokar Dalna Thali', category: 'Veg', price: 239 },
-  { name: 'Chholar Dal & Luchi', category: 'Veg', price: 189 },
-  { name: 'Echorer Dalna Thali', category: 'Veg', price: 249 },
-  { name: 'Basanti Pulao & Alur Dom', category: 'Veg', price: 229 },
-  { name: 'Niramish Khichuri Thali', category: 'Veg', price: 209 },
+  { name: 'Ilish Macher Jhol Thali', category: 'Non-Veg', price: 149, image: '/assets/ilish.png' },
+  { name: 'Kosha Mangsho Thali', category: 'Non-Veg', price: 279, image: '/assets/kosha.png' },
+  { name: 'Chingri Malai Curry Thali', category: 'Non-Veg', price: 179, image: '/assets/chingri.png' },
+  { name: 'Chicken Dakbungalow Thali', category: 'Non-Veg', price: 169, image: '/assets/dakbungalow_new.jpg' },
+  { name: 'Shukto & Rice Thali', category: 'Veg', price: 49, image: '/assets/shukto_new.png' },
+  { name: 'Dhokar Dalna Thali', category: 'Veg', price: 69, image: '/assets/dhokar_new.jpg' },
+  { name: 'Chholar Dal & Luchi', category: 'Veg', price: 49, image: '/assets/chholar_new.png' },
+  { name: 'Echorer Chingri Thali', category: 'Veg', price: 79, image: '/assets/echorer_new.jpg' },
+  { name: 'Basanti Pulao & Alur Dom', category: 'Veg', price: 129, image: '/assets/basanti_new.jpg' },
+  { name: 'Niramish Khichuri Thali', category: 'Veg', price: 59, image: '/assets/khichuri_new.jpg' },
 ];
 
 const timeSlots = [
@@ -674,7 +674,7 @@ export function SubscriptionOrder() {
     mealOptions.forEach(m => {
       const el = document.createElement('div');
       el.className = 'so-option' + (state.selectedMeals.includes(m.name) ? ' selected' : '');
-      el.innerHTML = `<span class="so-check">${state.selectedMeals.includes(m.name) ? '✓' : ''}</span><span class="so-label">${m.name}</span><span class="so-price">₹${m.price}</span>`;
+      el.innerHTML = `<span class="so-check">${state.selectedMeals.includes(m.name) ? '✓' : ''}</span><img src="${m.image}" alt="${m.name}" style="width: 36px; height: 36px; border-radius: 8px; object-fit: cover; flex-shrink: 0;"><span class="so-label">${m.name}</span><span class="so-price">₹${m.price}</span>`;
       el.addEventListener('click', () => {
         const idx = state.selectedMeals.indexOf(m.name);
         if (idx > -1) state.selectedMeals.splice(idx, 1);
